@@ -1,0 +1,634 @@
+{
+  "Uuid": "231e883f-0ede-484a-af15-56767d44af0b",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "FT-標註[樑]",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "be41bae79f954b8eb12a92642e0a3dad",
+      "Name": "標註類型(key in)",
+      "Type": "string",
+      "Type2": "string",
+      "Value": "FT-DIM-BEAM(TXT_4mm)",
+      "Description": "建立一個字串。",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "e532ddefb8d041aaa1da74800ba5f4c1",
+      "Name": "標註間距_外層 (總寬)",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "600",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 50.0,
+      "NumberType": "Double",
+      "Description": "產生數值",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "9b3a98c2baa94ebe86a4bb71f534300d",
+      "Name": "  框選[網格]&[樑]",
+      "Type": "selection",
+      "Type2": "hostSelection",
+      "Value": "5013e85c-1f63-4069-8884-8367e2baead3-0006f193,c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6c0e,c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6c13,c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6caf,c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6ce5,c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6cee,c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6d11,c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6d3a,3d31ff92-e922-4fa7-9aa8-004553f855f0-000d95bf,3d31ff92-e922-4fa7-9aa8-004553f855f0-000d95c0,0fe37900-ee8c-4dd1-90ed-2c7ad106bdcc-000e40b9,0fe37900-ee8c-4dd1-90ed-2c7ad106bdcc-000e40c5,2c09d4da-89bb-4561-bb5d-71a4010428a5-000ee8a1,2c09d4da-89bb-4561-bb5d-71a4010428a5-000eebc5,2c09d4da-89bb-4561-bb5d-71a4010428a5-000eec1a,2c09d4da-89bb-4561-bb5d-71a4010428a5-000eec37,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000ef445,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000ef4a8,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000ef542,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000ef54b,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000ef8d5,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000ef8fb,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000efc5a,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000efc67,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000efc73,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000efd89,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000efd92,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f019c,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f01a8,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f01b3,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f01e3,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f01ee,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f01f9,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f02e0,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0da6,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0dd6,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0df6,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0e16,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0e46,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0e88,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0ea8,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0ec8,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0ef8,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0f21,00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0f52,8a8a6f09-0644-43c4-9a85-a8be8db7e3e1-000f111a,8a8a6f09-0644-43c4-9a85-a8be8db7e3e1-000f114b,8a8a6f09-0644-43c4-9a85-a8be8db7e3e1-000f118e,1b92780c-f8ce-4921-aead-3725683e5311-000f1500,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110dd2,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110dd3,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110dde,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-001122cf,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00112327,d2115d8c-5ff4-4e0f-849e-eaef2b0545a4-001328dd,d07e8604-ef9c-418c-9deb-00db5d63bc12-0013b3c7,8440d9f5-2fea-4729-8d6e-5b3dd6aca467-0015b201,8440d9f5-2fea-4729-8d6e-5b3dd6aca467-0015b26d,02e8e713-ef40-42b7-b27d-e85c9e5c71f8-00160272,e2816bb3-3fcb-46bb-8471-7236331d486f-001672a7,8fcfca27-765a-4983-99e7-3885e50cd900-001cf99f,8fcfca27-765a-4983-99e7-3885e50cd900-001cf9a0,8fcfca27-765a-4983-99e7-3885e50cd900-001cf9a1,8fcfca27-765a-4983-99e7-3885e50cd900-001cf9a2,8fcfca27-765a-4983-99e7-3885e50cd900-001cf9ac,1eeec0ac-b7ac-41b5-ac3b-cfc63fa41822-001d0e90,1eeec0ac-b7ac-41b5-ac3b-cfc63fa41822-001d0eba,1eeec0ac-b7ac-41b5-ac3b-cfc63fa41822-001d0f55,1eeec0ac-b7ac-41b5-ac3b-cfc63fa41822-001d0f57,0b30e4ce-4623-442f-94b7-1fad7f90cb11-001d13ef,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ed2,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ed3,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2eda,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2edb,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2edf,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ee0,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ee3,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ee4,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ee5,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ee6,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d327f,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d3280,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d3284,a27e44cb-a139-415e-97b8-cbae85bdec0e-001d3285,bfcf814d-848f-4da9-896c-425ef82b223c-001d4026,bfcf814d-848f-4da9-896c-425ef82b223c-001d40b0,bfcf814d-848f-4da9-896c-425ef82b223c-001d40b1,4cd66b6f-250b-4e3f-a1cb-0867512fe3ea-001dee74,5dc2c36c-8882-4a97-8b59-9b200bac6af9-00206f41,5dc2c36c-8882-4a97-8b59-9b200bac6af9-00206fa3,c0cc84d2-c685-456f-95f1-1ca04b83adec-002084df,1d92f7e3-6cd7-4b6e-ac71-0d0539b33374-0020967b",
+      "Description": "從 Revit 文件中選取多個元素。",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "6bf132297b464313aa51ddedc3e0e554",
+      "Name": "標註間距_內層 (樑與網格)",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "100",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 50.0,
+      "NumberType": "Double",
+      "Description": "產生數值",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "9e2bada3ee63468aa4612b74ec018a79",
+      "Name": " Y向-總尺寸位置 (否← / 是→)",
+      "Type": "boolean",
+      "Type2": "boolean",
+      "Value": "true",
+      "Description": "啟用在 True 與 False 之間選取",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "ca6d9e42ceff4cb3a0682bf4f19d6f29",
+      "Name": " X向-總尺寸位置 (否↓ / 是 ↑)",
+      "Type": "boolean",
+      "Type2": "boolean",
+      "Value": "true",
+      "Description": "啟用在 True 與 False 之間選取",
+      "SelectedIndex": 0
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "be41bae79f954b8eb12a92642e0a3dad",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5f23198122e34a5b9f4e1ee5e96a8ef6",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "FT-DIM-BEAM(TXT_4mm)"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 50.0,
+      "Id": "e532ddefb8d041aaa1da74800ba5f4c1",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b18b7a18230547f4b77f33546a995cc3",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 600.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "WatchWidth": 200.0,
+      "WatchHeight": 38.0,
+      "Id": "1f1207a82adf4e049100a59af557edbc",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "5e032ffe217549828597e033109986ca",
+          "Name": "",
+          "Description": "要顯示其輸出的節點",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8b27abe92f5741f486beacbe3ba4c6e8",
+          "Name": "",
+          "Description": "節點輸出",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "視覺化節點的輸出"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementsSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "5013e85c-1f63-4069-8884-8367e2baead3-0006f193",
+        "c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6c0e",
+        "c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6c13",
+        "c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6caf",
+        "c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6ce5",
+        "c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6cee",
+        "c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6d11",
+        "c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6d3a",
+        "3d31ff92-e922-4fa7-9aa8-004553f855f0-000d95bf",
+        "3d31ff92-e922-4fa7-9aa8-004553f855f0-000d95c0",
+        "0fe37900-ee8c-4dd1-90ed-2c7ad106bdcc-000e40b9",
+        "0fe37900-ee8c-4dd1-90ed-2c7ad106bdcc-000e40c5",
+        "2c09d4da-89bb-4561-bb5d-71a4010428a5-000ee8a1",
+        "2c09d4da-89bb-4561-bb5d-71a4010428a5-000eebc5",
+        "2c09d4da-89bb-4561-bb5d-71a4010428a5-000eec1a",
+        "2c09d4da-89bb-4561-bb5d-71a4010428a5-000eec37",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000ef445",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000ef4a8",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000ef542",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000ef54b",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000ef8d5",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000ef8fb",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000efc5a",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000efc67",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000efc73",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000efd89",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000efd92",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f019c",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f01a8",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f01b3",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f01e3",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f01ee",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f01f9",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f02e0",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0da6",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0dd6",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0df6",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0e16",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0e46",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0e88",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0ea8",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0ec8",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0ef8",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0f21",
+        "00d3bce1-b14e-4eb3-8417-168ab9c8180e-000f0f52",
+        "8a8a6f09-0644-43c4-9a85-a8be8db7e3e1-000f111a",
+        "8a8a6f09-0644-43c4-9a85-a8be8db7e3e1-000f114b",
+        "8a8a6f09-0644-43c4-9a85-a8be8db7e3e1-000f118e",
+        "1b92780c-f8ce-4921-aead-3725683e5311-000f1500",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110dd2",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110dd3",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110dde",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-001122cf",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00112327",
+        "d2115d8c-5ff4-4e0f-849e-eaef2b0545a4-001328dd",
+        "d07e8604-ef9c-418c-9deb-00db5d63bc12-0013b3c7",
+        "8440d9f5-2fea-4729-8d6e-5b3dd6aca467-0015b201",
+        "8440d9f5-2fea-4729-8d6e-5b3dd6aca467-0015b26d",
+        "02e8e713-ef40-42b7-b27d-e85c9e5c71f8-00160272",
+        "e2816bb3-3fcb-46bb-8471-7236331d486f-001672a7",
+        "8fcfca27-765a-4983-99e7-3885e50cd900-001cf99f",
+        "8fcfca27-765a-4983-99e7-3885e50cd900-001cf9a0",
+        "8fcfca27-765a-4983-99e7-3885e50cd900-001cf9a1",
+        "8fcfca27-765a-4983-99e7-3885e50cd900-001cf9a2",
+        "8fcfca27-765a-4983-99e7-3885e50cd900-001cf9ac",
+        "1eeec0ac-b7ac-41b5-ac3b-cfc63fa41822-001d0e90",
+        "1eeec0ac-b7ac-41b5-ac3b-cfc63fa41822-001d0eba",
+        "1eeec0ac-b7ac-41b5-ac3b-cfc63fa41822-001d0f55",
+        "1eeec0ac-b7ac-41b5-ac3b-cfc63fa41822-001d0f57",
+        "0b30e4ce-4623-442f-94b7-1fad7f90cb11-001d13ef",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ed2",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ed3",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2eda",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2edb",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2edf",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ee0",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ee3",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ee4",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ee5",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d2ee6",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d327f",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d3280",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d3284",
+        "a27e44cb-a139-415e-97b8-cbae85bdec0e-001d3285",
+        "bfcf814d-848f-4da9-896c-425ef82b223c-001d4026",
+        "bfcf814d-848f-4da9-896c-425ef82b223c-001d40b0",
+        "bfcf814d-848f-4da9-896c-425ef82b223c-001d40b1",
+        "4cd66b6f-250b-4e3f-a1cb-0867512fe3ea-001dee74",
+        "5dc2c36c-8882-4a97-8b59-9b200bac6af9-00206f41",
+        "5dc2c36c-8882-4a97-8b59-9b200bac6af9-00206fa3",
+        "c0cc84d2-c685-456f-95f1-1ca04b83adec-002084df",
+        "1d92f7e3-6cd7-4b6e-ac71-0d0539b33374-0020967b"
+      ],
+      "Id": "9b3a98c2baa94ebe86a4bb71f534300d",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "3f10bbac8d554b93bf5526513d2035ff",
+          "Name": "Elements",
+          "Description": "選取的元素。",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "從 Revit 文件中選取多個元素。"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\nclr.AddReference('RevitAPI')\r\nclr.AddReference('RevitServices')\r\n\r\nfrom Autodesk.Revit.DB import Grid as RevitGrid\r\nfrom Autodesk.Revit.DB import (\r\n    FilteredElementCollector, DimensionType, Options,\r\n    GeometryInstance, Solid, PlanarFace, Line, XYZ,\r\n    ReferenceArray, Reference, BuiltInCategory, BuiltInParameter,\r\n    UnitUtils, UnitTypeId\r\n)\r\n\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc  = DocumentManager.Instance.CurrentDBDocument\r\nview = doc.ActiveView\r\n\r\n# ─── 輸入 ───────────────────────────────────────────────────────────────────────\r\nraw     = IN[0] if isinstance(IN[0], list) else [IN[0]]\r\ndname   = IN[1]\r\nD_FAR   = UnitUtils.ConvertToInternalUnits(float(IN[2] or 400), UnitTypeId.Millimeters)\r\nD_NEAR  = UnitUtils.ConvertToInternalUnits(float(IN[3] or 50),  UnitTypeId.Millimeters)\r\nMIN_LEN = UnitUtils.ConvertToInternalUnits(float(IN[4] or 500), UnitTypeId.Millimeters)\r\nSX = 1.0 if IN[5] else -1.0\r\nSY = 1.0 if IN[6] else -1.0\r\nPAD = UnitUtils.ConvertToInternalUnits(30.0, UnitTypeId.Millimeters)\r\n\r\ndef mm(v):\r\n    return UnitUtils.ConvertToInternalUnits(v, UnitTypeId.Millimeters)\r\n\r\ndef uw(x):\r\n    return x.InternalElement if hasattr(x, 'InternalElement') else x\r\n\r\n# ─── 標註類型（雙重備援） ────────────────────────────────────────────────────────\r\ndim_type = None\r\nfor dt in FilteredElementCollector(doc).OfClass(DimensionType).WhereElementIsElementType():\r\n    try:\r\n        if dt.Name == dname:\r\n            dim_type = dt\r\n            break\r\n    except:\r\n        continue\r\nif dim_type is None:\r\n    for dt in FilteredElementCollector(doc).OfClass(DimensionType).WhereElementIsElementType():\r\n        try:\r\n            p = dt.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME)\r\n            if p is not None and p.AsString() == dname:\r\n                dim_type = dt\r\n                break\r\n        except:\r\n            continue\r\nif dim_type is None:\r\n    OUT = [[], [\"找不到標註類型: \" + str(dname)]]\r\n    raise Exception(\"DimensionType not found: \" + str(dname))\r\n\r\n# ─── 分類元素 ─────────────────────────────────────────────────────────────────\r\nbeams_x, beams_y = [], []\r\ngrids_h, grids_v = [], []\r\n\r\nfor item in raw:\r\n    e = uw(item)\r\n    if e is None:\r\n        continue\r\n\r\n    # ✅ Grid 用 isinstance + e.Curve 直接讀取（不用 Location.Curve）\r\n    if isinstance(e, RevitGrid):\r\n        try:\r\n            c  = e.Curve          # Grid 專屬屬性，比 Location.Curve 可靠\r\n            p0 = c.GetEndPoint(0)\r\n            p1 = c.GetEndPoint(1)\r\n            if abs(p1.X - p0.X) > abs(p1.Y - p0.Y):\r\n                grids_h.append(e)\r\n            else:\r\n                grids_v.append(e)\r\n        except:\r\n            pass\r\n        continue\r\n\r\n    # 結構框架（樑）\r\n    cat = e.Category\r\n    if cat is None:\r\n        continue\r\n    if cat.Id.IntegerValue != int(BuiltInCategory.OST_StructuralFraming):\r\n        continue\r\n    loc = e.Location\r\n    if not hasattr(loc, 'Curve'):\r\n        continue\r\n    c = loc.Curve\r\n    if c.Length < MIN_LEN:\r\n        continue\r\n    p0 = c.GetEndPoint(0)\r\n    p1 = c.GetEndPoint(1)\r\n    if abs(p1.X - p0.X) > abs(p1.Y - p0.Y):\r\n        beams_x.append(e)\r\n    else:\r\n        beams_y.append(e)\r\n\r\n# ─── 取得截面兩側面參考 ──────────────────────────────────────────────────────────\r\ndef get_face_refs(beam, use_y):\r\n    opt = Options()\r\n    opt.ComputeReferences        = True\r\n    opt.IncludeNonVisibleObjects = False\r\n    opt.View = view\r\n\r\n    candidates = []\r\n    for g in beam.get_Geometry(opt):\r\n        solids = []\r\n        if isinstance(g, GeometryInstance):\r\n            try:\r\n                for sg in g.GetInstanceGeometry():\r\n                    if isinstance(sg, Solid) and sg.Volume > 1e-9:\r\n                        solids.append(sg)\r\n            except:\r\n                pass\r\n        elif isinstance(g, Solid) and g.Volume > 1e-9:\r\n            solids.append(g)\r\n\r\n        for solid in solids:\r\n            for face in solid.Faces:\r\n                if not isinstance(face, PlanarFace):\r\n                    continue\r\n                fn  = face.FaceNormal\r\n                dot = abs(fn.Y) if use_y else abs(fn.X)\r\n                if dot < 0.9:\r\n                    continue\r\n                try:\r\n                    ref = face.Reference\r\n                except:\r\n                    continue\r\n                if ref is None:\r\n                    continue\r\n                pos = face.Origin.Y if use_y else face.Origin.X\r\n                candidates.append((pos, ref))\r\n\r\n    if len(candidates) < 2:\r\n        return []\r\n    candidates.sort(key=lambda x: x[0])\r\n    return [candidates[0], candidates[-1]]\r\n\r\n# ─── 找距樑中心最近的柱線（不依賴截面範圍） ─────────────────────────────────────\r\ndef find_nearest_grid(grids, use_y, center_pos):\r\n    best   = None\r\n    best_d = float('inf')\r\n    for g in grids:\r\n        try:\r\n            c = g.Curve           # ✅ Grid.Curve 直接屬性\r\n        except:\r\n            try:\r\n                c = g.Location.Curve\r\n            except:\r\n                continue\r\n        p0  = c.GetEndPoint(0)\r\n        p1  = c.GetEndPoint(1)\r\n        pos = (p0.Y + p1.Y) / 2.0 if use_y else (p0.X + p1.X) / 2.0\r\n        d   = abs(pos - center_pos)\r\n        if d < best_d:\r\n            best_d = d\r\n            best   = (pos, Reference(g))\r\n    return [best] if best is not None else []\r\n\r\n# ─── 建立標註（過濾 0 段） ────────────────────────────────────────────────────────\r\ndef make_dim(refs_list, line):\r\n    if len(refs_list) < 2:\r\n        return None\r\n    # 過濾相鄰位置太近的參考（防止 0 尺寸）\r\n    min_seg = mm(1)\r\n    filtered = [refs_list[0]]\r\n    for item in refs_list[1:]:\r\n        if abs(item[0] - filtered[-1][0]) >= min_seg:\r\n            filtered.append(item)\r\n    if len(filtered) < 2:\r\n        return None\r\n    ra = ReferenceArray()\r\n    for _, ref in filtered:\r\n        ra.Append(ref)\r\n    try:\r\n        return doc.Create.NewDimension(view, line, ra, dim_type)\r\n    except Exception as ex:\r\n        return \"ERR:\" + str(ex)\r\n\r\n# ─── 跨度重疊分組 ────────────────────────────────────────────────────────────────\r\ndef group_by_span_overlap(beams, get_lo_hi_cx):\r\n    info  = [(b,) + get_lo_hi_cx(b) for b in beams]\r\n    used  = [False] * len(info)\r\n    groups = []\r\n    for i, (b, lo, hi, cx) in enumerate(info):\r\n        if used[i]:\r\n            continue\r\n        grp = [info[i]]\r\n        used[i] = True\r\n        for j, (b2, lo2, hi2, cx2) in enumerate(info):\r\n            if used[j]:\r\n                continue\r\n            if lo2 < hi and lo < hi2:\r\n                grp.append(info[j])\r\n                used[j] = True\r\n        groups.append(grp)\r\n    return groups\r\n\r\ndef x_lo_hi_cx(b):\r\n    c  = b.Location.Curve\r\n    x0 = c.GetEndPoint(0).X\r\n    x1 = c.GetEndPoint(1).X\r\n    return (min(x0,x1), max(x0,x1), (x0+x1)/2.0)\r\n\r\ndef y_lo_hi_cy(b):\r\n    c  = b.Location.Curve\r\n    y0 = c.GetEndPoint(0).Y\r\n    y1 = c.GetEndPoint(1).Y\r\n    return (min(y0,y1), max(y0,y1), (y0+y1)/2.0)\r\n\r\n# ─── 主程式 ───────────────────────────────────────────────────────────────────────\r\nresults, errors = [], []\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n# ══ X向樑：BasisY面 + 水平柱線 → 垂直標註線 ══════════════════════════════════════\r\nfor beam in beams_x:\r\n    c  = beam.Location.Curve\r\n    cx = (c.GetEndPoint(0).X + c.GetEndPoint(1).X) / 2.0\r\n\r\n    fr = get_face_refs(beam, use_y=True)\r\n    if len(fr) < 2:\r\n        errors.append(\"X-beam %d: no Y-faces\" % beam.Id.IntegerValue)\r\n        continue\r\n\r\n    y_lo = fr[0][0]\r\n    y_hi = fr[-1][0]\r\n    cy_beam = (y_lo + y_hi) / 2.0\r\n    g_in = find_nearest_grid(grids_h, use_y=True,  center_pos=cy_beam)\r\n\r\n    x_line = cx + SX * D_NEAR\r\n    line   = Line.CreateBound(XYZ(x_line, y_lo - PAD, 0.0),\r\n                              XYZ(x_line, y_hi + PAD, 0.0))\r\n    d = make_dim([fr[0]] + g_in + [fr[-1]], line)\r\n    (results if d and not isinstance(d, str) else errors).append(d)\r\n\r\nfor grp in group_by_span_overlap(beams_x, x_lo_hi_cx):\r\n    if len(grp) < 2:\r\n        continue\r\n    all_faces, cx_list = [], []\r\n    for (b, lo, hi, cx) in grp:\r\n        fr = get_face_refs(b, use_y=True)\r\n        if len(fr) >= 2:\r\n            all_faces.extend(fr)\r\n        cx_list.append(cx)\r\n    if len(all_faces) < 4:\r\n        continue\r\n    all_faces.sort(key=lambda x: x[0])\r\n    gcx   = sum(cx_list) / len(cx_list)\r\n    x_out = gcx + SX * D_FAR\r\n    line  = Line.CreateBound(XYZ(x_out, all_faces[0][0] - PAD, 0.0),\r\n                             XYZ(x_out, all_faces[-1][0] + PAD, 0.0))\r\n    d = make_dim(all_faces, line)\r\n    (results if d and not isinstance(d, str) else errors).append(d)\r\n\r\n# ══ Y向樑：BasisX面 + 垂直柱線 → 水平標註線 ══════════════════════════════════════\r\nfor beam in beams_y:\r\n    c  = beam.Location.Curve\r\n    cy = (c.GetEndPoint(0).Y + c.GetEndPoint(1).Y) / 2.0\r\n\r\n    fr = get_face_refs(beam, use_y=False)\r\n    if len(fr) < 2:\r\n        errors.append(\"Y-beam %d: no X-faces\" % beam.Id.IntegerValue)\r\n        continue\r\n\r\n    x_lo = fr[0][0]\r\n    x_hi = fr[-1][0]\r\n    cx_beam = (x_lo + x_hi) / 2.0\r\n    g_in = find_nearest_grid(grids_v, use_y=False, center_pos=cx_beam)\r\n\r\n    y_line = cy + SY * D_NEAR\r\n    line   = Line.CreateBound(XYZ(x_lo - PAD, y_line, 0.0),\r\n                              XYZ(x_hi + PAD, y_line, 0.0))\r\n    d = make_dim([fr[0]] + g_in + [fr[-1]], line)\r\n    (results if d and not isinstance(d, str) else errors).append(d)\r\n\r\nfor grp in group_by_span_overlap(beams_y, y_lo_hi_cy):\r\n    if len(grp) < 2:\r\n        continue\r\n    all_faces, cy_list = [], []\r\n    for (b, lo, hi, cy) in grp:\r\n        fr = get_face_refs(b, use_y=False)\r\n        if len(fr) >= 2:\r\n            all_faces.extend(fr)\r\n        cy_list.append(cy)\r\n    if len(all_faces) < 4:\r\n        continue\r\n    all_faces.sort(key=lambda x: x[0])\r\n    gcy   = sum(cy_list) / len(cy_list)\r\n    y_out = gcy + SY * D_FAR\r\n    line  = Line.CreateBound(XYZ(all_faces[0][0] - PAD, y_out, 0.0),\r\n                             XYZ(all_faces[-1][0] + PAD, y_out, 0.0))\r\n    d = make_dim(all_faces, line)\r\n    (results if d and not isinstance(d, str) else errors).append(d)\r\n\r\nerrors.append(\"grids_h=%d  grids_v=%d  beams_x=%d  beams_y=%d\"\r\n              % (len(grids_h), len(grids_v), len(beams_x), len(beams_y)))\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\nOUT = [results, errors]",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "1dde70b565074c488b360aa4dea3364e",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "1a297d2688534530b748e4267ac724d2",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e650cc6cec1a484f8ebd7e525a9d01a0",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ca8a1a25835b48cd8eaab17d1bad3f28",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c80a56e8088e418cb65e11defc6c97d3",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "93ae4d3f81f5405bb7066b14d1a816aa",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bff6dd6d2219449db749abce97ab0590",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9c7c5e7a87bc4ddaa062c31244a2ddcd",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5fe761a723044bd9990a946f86c29d95",
+          "Name": "OUT",
+          "Description": "Python 指令碼的結果",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "執行嵌入的 Python 指令碼。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 50.0,
+      "Id": "6bf132297b464313aa51ddedc3e0e554",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "367cb11c40d848bebba1ed64605c8167",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 100.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "9e2bada3ee63468aa4612b74ec018a79",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8d4b4486c2644edeb740b768f1002709",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": true
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "ca6d9e42ceff4cb3a0682bf4f19d6f29",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "1065dd7aa57c4d3ead48ed906e25a954",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": true
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 50.0,
+      "Id": "15306431630d428f998066f26a0f6d03",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "70bfc0a7488d49fbaafd154f3775719b",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 600.0
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "5f23198122e34a5b9f4e1ee5e96a8ef6",
+      "End": "e650cc6cec1a484f8ebd7e525a9d01a0",
+      "Id": "757f97d8b8d1478699073493ef816a0d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b18b7a18230547f4b77f33546a995cc3",
+      "End": "ca8a1a25835b48cd8eaab17d1bad3f28",
+      "Id": "3dd78191959c407e9c4854922ffc6f02",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3f10bbac8d554b93bf5526513d2035ff",
+      "End": "1a297d2688534530b748e4267ac724d2",
+      "Id": "9db74852e5fb4d6ab7da6b00240bb758",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5fe761a723044bd9990a946f86c29d95",
+      "End": "5e032ffe217549828597e033109986ca",
+      "Id": "975d98fd997648ea96df011e3b884deb",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "367cb11c40d848bebba1ed64605c8167",
+      "End": "c80a56e8088e418cb65e11defc6c97d3",
+      "Id": "42def9f507004308abd1ca8d453f6ac5",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8d4b4486c2644edeb740b768f1002709",
+      "End": "bff6dd6d2219449db749abce97ab0590",
+      "Id": "33b58303f2d04c20b6341732da653236",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "1065dd7aa57c4d3ead48ed906e25a954",
+      "End": "9c7c5e7a87bc4ddaa062c31244a2ddcd",
+      "Id": "a6d7b7715c514ea0bd37182967850dc9",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "70bfc0a7488d49fbaafd154f3775719b",
+      "End": "93ae4d3f81f5405bb7066b14d1a816aa",
+      "Id": "d2f505c494b84d0d8755a728020c61ba",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "性質",
+      "Version": "2.19",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.1",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "無",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.19.3.6394",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "背景預覽(_B)",
+      "EyeX": -16.423776395906014,
+      "EyeY": 17.79242442889818,
+      "EyeZ": 79.38158591354572,
+      "LookX": 16.423776395906014,
+      "LookY": -17.79242442889818,
+      "LookZ": -79.38158591354572,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "be41bae79f954b8eb12a92642e0a3dad",
+        "Name": "標註類型(key in)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -23.701448152972091,
+        "Y": 107.11735257369895
+      },
+      {
+        "Id": "e532ddefb8d041aaa1da74800ba5f4c1",
+        "Name": "標註間距_外層 (總寬)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -23.7014481529721,
+        "Y": 273.117352573699
+      },
+      {
+        "Id": "1f1207a82adf4e049100a59af557edbc",
+        "Name": "Watch",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 867.07248671426328,
+        "Y": 280.7179778451179
+      },
+      {
+        "Id": "9b3a98c2baa94ebe86a4bb71f534300d",
+        "Name": "  框選[網格]&[樑]",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -21.092171644186124,
+        "Y": -151.48007094390528
+      },
+      {
+        "Id": "1dde70b565074c488b360aa4dea3364e",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 596.55236165998,
+        "Y": 278.97804037226
+      },
+      {
+        "Id": "6bf132297b464313aa51ddedc3e0e554",
+        "Name": "標註間距_內層 (樑與網格)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -23.701448152972091,
+        "Y": 422.117352573699
+      },
+      {
+        "Id": "9e2bada3ee63468aa4612b74ec018a79",
+        "Name": " Y向-總尺寸位置 (否← / 是→)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -24.9258995060286,
+        "Y": 716.117352573699
+      },
+      {
+        "Id": "ca6d9e42ceff4cb3a0682bf4f19d6f29",
+        "Name": " X向-總尺寸位置 (否↓ / 是 ↑)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -28.591491327537426,
+        "Y": 877.31658802619506
+      },
+      {
+        "Id": "15306431630d428f998066f26a0f6d03",
+        "Name": "最短樑長度（過濾柱邊短樑）",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -23.7014481529721,
+        "Y": 569.117352573699
+      }
+    ],
+    "Annotations": [],
+    "X": 144.384725490458,
+    "Y": 201.63441811399628,
+    "Zoom": 0.793355636840143
+  }
+}

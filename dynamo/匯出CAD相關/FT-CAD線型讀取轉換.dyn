@@ -1,0 +1,531 @@
+{
+  "Uuid": "e605b026-1125-434a-a279-361675c6198e",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "FT-CAD線型讀取轉換",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "29cb8648bfe1485c87918985df73a0a4",
+      "Name": " 點選CAD",
+      "Type": "selection",
+      "Type2": "hostSelection",
+      "Value": "9ab504fd-f2ee-4332-b581-f72356d6de5e-001430b9",
+      "Description": "從文件中選取模型元素。",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "d86701d650354e87823111c9edf499d5",
+      "Name": "查尋圖層[Ctrl+V]",
+      "Type": "string",
+      "Type2": "string",
+      "Value": "FT-牆-剖線__RC牆-HATCH-1",
+      "Description": "建立一個字串。",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "a1348f5d06224fd4b44ee88ec1dae576",
+      "Name": "否【3D線】/ 是【2D線】 ",
+      "Type": "boolean",
+      "Type2": "boolean",
+      "Value": "true",
+      "Description": "啟用在 True 與 False 之間選取",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "97a7a18562b646db98b70150faa3e8cf",
+      "Name": "對應下方線型選入[編號]",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "7",
+      "MaximumValue": 50.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "NumberType": "Double",
+      "Description": "產生數值",
+      "SelectedIndex": 0
+    }
+  ],
+  "Outputs": [
+    {
+      "Id": "036f330b12424b43bcbc8f38a4c9c05c",
+      "Name": "專案所有線型",
+      "Type": "unknown",
+      "InitialValue": "",
+      "Description": "執行嵌入的 Python 指令碼。"
+    }
+  ],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\nimport System\r\n\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nclr.AddReference('RevitAPIUI')\r\nfrom Autodesk.Revit.UI import *\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc          = DocumentManager.Instance.CurrentDBDocument\r\nuidoc        = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\nactive_view  = doc.ActiveView\r\ncad_instance = UnwrapElement(IN[0])\r\n\r\nraw = IN[1]\r\ntarget_layers = {raw.strip()} if isinstance(raw, str) \\\r\n                else {str(s).strip() for s in raw}\r\nline_style_name = str(IN[2]).strip()\r\n\r\nuse_detail = True\r\nif len(IN) > 3 and IN[3] is not None:\r\n    use_detail = bool(IN[3])\r\n\r\nexisting_lines = []\r\nif len(IN) > 4 and IN[4] is not None:\r\n    raw4 = IN[4]\r\n    existing_lines = raw4 if isinstance(raw4, list) else [raw4]\r\n\r\ndebug = []\r\ndebug.append(\"目標圖層：\" + str(target_layers))\r\ndebug.append(\"線型模式：\" + (\"細部線\" if use_detail else \"模型線\"))\r\n\r\nall_styles   = FilteredElementCollector(doc).OfClass(GraphicsStyle)\r\ntarget_style = next((s for s in all_styles if s.Name == line_style_name), None)\r\ndebug.append(\"目標線型：\" + line_style_name + (\" ✓\" if target_style else \" ✗ 找不到\"))\r\n\r\nsub_cats      = list(cad_instance.Category.SubCategories)\r\ntarget_gs_ids = set()\r\nfor sc in sub_cats:\r\n    if sc.Name in target_layers:\r\n        gs = sc.GetGraphicsStyle(GraphicsStyleType.Projection)\r\n        if gs:\r\n            target_gs_ids.add(gs.Id)\r\n            debug.append(\"圖層找到：\" + sc.Name)\r\n\r\nif not target_gs_ids:\r\n    debug.append(\"⚠ 找不到目標圖層，請確認名稱正確\")\r\n    OUT = [[], debug]\r\nelse:\r\n    filtered_curves = []\r\n\r\n    opt = Options()\r\n    opt.ComputeReferences        = True\r\n    opt.IncludeNonVisibleObjects = True\r\n\r\n    def collect(geom_list):\r\n        for g in geom_list:\r\n            if isinstance(g, GeometryInstance):\r\n                collect(g.GetInstanceGeometry())\r\n            elif isinstance(g, Curve):\r\n                if g.GraphicsStyleId in target_gs_ids:\r\n                    filtered_curves.append(('c', g))\r\n            elif isinstance(g, PolyLine):\r\n                if g.GraphicsStyleId in target_gs_ids:\r\n                    filtered_curves.append(('p', g))\r\n\r\n    collect(cad_instance.get_Geometry(opt))\r\n    debug.append(\"收集曲線數：\" + str(len(filtered_curves)))\r\n\r\n    results       = []\r\n    created_ids   = System.Collections.Generic.List[ElementId]()\r\n    fail_count    = 0\r\n    restyle_count = 0\r\n\r\n    TransactionManager.Instance.EnsureInTransaction(doc)\r\n    try:\r\n        sketch_plane = None\r\n        plane_z      = active_view.Origin.Z\r\n        if not use_detail:\r\n            plane        = Plane.CreateByNormalAndOrigin(XYZ.BasisZ, XYZ(0, 0, plane_z))\r\n            sketch_plane = SketchPlane.Create(doc, plane)\r\n\r\n        def project_to_z(curve, z):\r\n            if isinstance(curve, Line):\r\n                p0 = curve.GetEndPoint(0)\r\n                p1 = curve.GetEndPoint(1)\r\n                return Line.CreateBound(XYZ(p0.X, p0.Y, z), XYZ(p1.X, p1.Y, z))\r\n            elif isinstance(curve, Arc):\r\n                p0  = curve.GetEndPoint(0)\r\n                p1  = curve.GetEndPoint(1)\r\n                mid = curve.Evaluate(0.5, True)\r\n                return Arc.Create(XYZ(p0.X, p0.Y, z), XYZ(p1.X, p1.Y, z), XYZ(mid.X, mid.Y, z))\r\n            return curve\r\n\r\n        def make_curve(curve):\r\n            if use_detail:\r\n                new_c = doc.Create.NewDetailCurve(active_view, curve)\r\n            else:\r\n                flat  = project_to_z(curve, plane_z)\r\n                new_c = doc.Create.NewModelCurve(flat, sketch_plane)\r\n            if target_style:\r\n                new_c.LineStyle = target_style\r\n            results.append(new_c)\r\n            created_ids.Add(new_c.Id)\r\n\r\n        for kind, g in filtered_curves:\r\n            try:\r\n                if kind == 'c':\r\n                    make_curve(g)\r\n                else:\r\n                    pts = g.GetCoordinates()\r\n                    for i in range(len(pts) - 1):\r\n                        try:\r\n                            make_curve(Line.CreateBound(pts[i], pts[i + 1]))\r\n                        except Exception as seg_e:\r\n                            fail_count += 1\r\n                            if fail_count == 1:\r\n                                debug.append(\"線段錯誤：\" + str(seg_e)[:80])\r\n            except Exception as curve_e:\r\n                fail_count += 1\r\n                if fail_count == 1:\r\n                    debug.append(\"曲線錯誤：\" + str(curve_e)[:80])\r\n\r\n        if target_style and existing_lines:\r\n            for item in existing_lines:\r\n                try:\r\n                    elem = UnwrapElement(item)\r\n                    if elem:\r\n                        elem.LineStyle = target_style\r\n                        restyle_count += 1\r\n                except:\r\n                    pass\r\n            debug.append(\"更改現有線型：\" + str(restyle_count) + \" 條\")\r\n\r\n        debug.append(\"✅ 新建：\" + str(len(results)) + \" 條  |  失敗：\" + str(fail_count))\r\n        TransactionManager.Instance.TransactionTaskDone()\r\n\r\n    except Exception as e:\r\n        TransactionManager.Instance.ForceCloseTransaction()\r\n        debug.append(\"❌ 交易失敗：\" + str(e))\r\n        results = []\r\n\r\n    if created_ids.Count > 0:\r\n        uidoc.Selection.SetElementIds(created_ids)\r\n\r\n    OUT = [results, debug]",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "48d0d191a189497886db73b145f9e7c1",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "3c6d712113bf43f4abce9c7f56f6995f",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0828f6dcd77d405bacff90b22a127f92",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "84014773c2514e3d85b6b615309634d0",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9b10e025af4f481fa0399909dac6aa46",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c66a204af54041c9b1f03747cda96e57",
+          "Name": "OUT",
+          "Description": "Python 指令碼的結果",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "執行嵌入的 Python 指令碼。"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "9ab504fd-f2ee-4332-b581-f72356d6de5e-001430b9"
+      ],
+      "Id": "29cb8648bfe1485c87918985df73a0a4",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7452e02dc52e4cdfb692f72b4c840628",
+          "Name": "Element",
+          "Description": "選取的元素。",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "從文件中選取模型元素。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "d86701d650354e87823111c9edf499d5",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5ed162d397c04bcabf31f86bb24402b4",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "FT-牆-剖線__RC牆-HATCH-1"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\nlines_cat = doc.Settings.Categories.get_Item(BuiltInCategory.OST_Lines)\r\n\r\nline_styles = sorted([\r\n    sc.Name for sc in lines_cat.SubCategories\r\n])\r\n\r\nOUT = line_styles",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "036f330b12424b43bcbc8f38a4c9c05c",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "d67f73049d8a411a978cdd39f1f646c6",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "79ea94617a3748fe967cc8987a7a7e9a",
+          "Name": "OUT",
+          "Description": "Python 指令碼的結果",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "執行嵌入的 Python 指令碼。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NumberType": "Double",
+      "Id": "53fac1f046c44e2f8576cc24cae5e5b2",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "13a02bd9e37e41e7962b2e7ca675c891",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個數字。",
+      "InputValue": 2.0
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "15031b51cb3349de916dbd1eca45cf0d",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "81f093333120479a9c3f819c6606ad22",
+          "Name": "list",
+          "Description": "要從中擷取項目的清單。\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e8cc901fb9694f65af21b2a24888cc9c",
+          "Name": "index",
+          "Description": "要擷取的項目索引。\n\nint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "47f87e8b8dfa44f0b3bf5719893c2b1c",
+          "Name": "item",
+          "Description": "清單中位於給定索引的項目。",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DSCore.List.GetItemAtIndex@var[]..[],int",
+      "Replication": "Auto",
+      "Description": "從位於指定索引的給定清單傳回項目。\n\nList.GetItemAtIndex (list: var[]..[], index: int): var[]..[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "a1348f5d06224fd4b44ee88ec1dae576",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "879a0bb88e2d414a9267e9b4803800fb",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": true
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 50.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "Id": "97a7a18562b646db98b70150faa3e8cf",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "31a789a76fa34072a81be530510a4a36",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 7.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "167a3aa337674a79b87cc62858360bbf",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "98ba1b106f814257a0b0a6eec9689587",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "0-FT-VOID-開口(虛)"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "7452e02dc52e4cdfb692f72b4c840628",
+      "End": "3c6d712113bf43f4abce9c7f56f6995f",
+      "Id": "a298c56053f04e6a94d5347736e6d7af",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5ed162d397c04bcabf31f86bb24402b4",
+      "End": "0828f6dcd77d405bacff90b22a127f92",
+      "Id": "c0be951fb03a4265aecf6361aedd53d3",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "79ea94617a3748fe967cc8987a7a7e9a",
+      "End": "81f093333120479a9c3f819c6606ad22",
+      "Id": "887808ce5a2c4a7babf4c50b2e7c6f64",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "47f87e8b8dfa44f0b3bf5719893c2b1c",
+      "End": "84014773c2514e3d85b6b615309634d0",
+      "Id": "fb9ecf6b2c2947c4867a1db64aa3f024",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "879a0bb88e2d414a9267e9b4803800fb",
+      "End": "9b10e025af4f481fa0399909dac6aa46",
+      "Id": "e3fa2913bd7f4cb7bb493bf4f81eb70a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "31a789a76fa34072a81be530510a4a36",
+      "End": "e8cc901fb9694f65af21b2a24888cc9c",
+      "Id": "0c69f06a4d1e4dd0bb0fd43dca9d4536",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "性質",
+      "Version": "2.19",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.1",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "無",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.19.3.6394",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "背景預覽(_B)",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "48d0d191a189497886db73b145f9e7c1",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 178.37695470438811,
+        "Y": 337.85495369640546
+      },
+      {
+        "Id": "29cb8648bfe1485c87918985df73a0a4",
+        "Name": " 點選CAD",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -176.66012651500739,
+        "Y": 130.74437464247404
+      },
+      {
+        "Id": "d86701d650354e87823111c9edf499d5",
+        "Name": "查尋圖層[Ctrl+V]",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -185.695953259471,
+        "Y": 293.790071540805
+      },
+      {
+        "Id": "036f330b12424b43bcbc8f38a4c9c05c",
+        "Name": "專案所有線型",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": true,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -570.622419896597,
+        "Y": 519.335688653206
+      },
+      {
+        "Id": "53fac1f046c44e2f8576cc24cae5e5b2",
+        "Name": "對應下方線型輸入[編號]",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -586.49808722197531,
+        "Y": 833.02479574607707
+      },
+      {
+        "Id": "15031b51cb3349de916dbd1eca45cf0d",
+        "Name": "List.GetItemAtIndex",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -185.215453158026,
+        "Y": 524.193632764649
+      },
+      {
+        "Id": "a1348f5d06224fd4b44ee88ec1dae576",
+        "Name": "否【3D線】/ 是【2D線】 ",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -174.228651479455,
+        "Y": 724.122386217119
+      },
+      {
+        "Id": "97a7a18562b646db98b70150faa3e8cf",
+        "Name": "對應下方線型選入[編號]",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -608.642777186638,
+        "Y": 665.525891759859
+      },
+      {
+        "Id": "167a3aa337674a79b87cc62858360bbf",
+        "Name": "置換線型(Ctrl+V)",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 145.485135790439,
+        "Y": 895.970753110576
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "058e78be9aa24e47a6db4cf6d8fdba4c",
+        "Title": "線型選取",
+        "DescriptionText": "描述 <按兩下這裡以編輯群組描述>",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "036f330b12424b43bcbc8f38a4c9c05c",
+          "15031b51cb3349de916dbd1eca45cf0d",
+          "53fac1f046c44e2f8576cc24cae5e5b2",
+          "a1348f5d06224fd4b44ee88ec1dae576",
+          "97a7a18562b646db98b70150faa3e8cf"
+        ],
+        "HasNestedGroups": false,
+        "Left": -618.642777186638,
+        "Top": 446.33568865320603,
+        "Width": 676.414125707183,
+        "Height": 518.689107092871,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 519.335688653206,
+        "InitialHeight": 458.68910709287104,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": 406.84724363818088,
+    "Y": -5.6561718812786523,
+    "Zoom": 0.70916190643493
+  }
+}

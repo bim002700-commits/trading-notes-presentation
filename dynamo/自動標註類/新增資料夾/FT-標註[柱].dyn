@@ -1,0 +1,704 @@
+{
+  "Uuid": "355998da-f6a7-4b21-b2b2-73e7965d3733",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "FT-標註[柱]",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "1331a7c2e33b4c1b9a824334f08c0f0b",
+      "Name": "標註間距_外層 (總寬總高)",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "700",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 300.0,
+      "StepValue": 100.0,
+      "NumberType": "Double",
+      "Description": "產生數值",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "25c491df72f244e29a3b3ed7d1b50a9e",
+      "Name": "  框選[網格]&[柱]",
+      "Type": "selection",
+      "Type2": "hostSelection",
+      "Value": "84af3260-c6c8-4bdc-b757-787ae1695462-000caa45,84af3260-c6c8-4bdc-b757-787ae1695462-000caa4f,84af3260-c6c8-4bdc-b757-787ae1695462-000caa59,84af3260-c6c8-4bdc-b757-787ae1695462-000caa92,84af3260-c6c8-4bdc-b757-787ae1695462-000caa9c,d180521d-af6a-47ae-ad79-ce695b89ea64-000cf9b6,d180521d-af6a-47ae-ad79-ce695b89ea64-000cf9b8,d180521d-af6a-47ae-ad79-ce695b89ea64-000cf9c2,d180521d-af6a-47ae-ad79-ce695b89ea64-000cf9c4,d180521d-af6a-47ae-ad79-ce695b89ea64-000cf9ce,d180521d-af6a-47ae-ad79-ce695b89ea64-000cf9d0,f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfba9,f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfbb6,f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfc0e,f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfc10,f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfc21,f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfc23,f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfe4a,f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfe57,f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfea9,f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfeab,fddc8763-454e-4698-aaa0-e9035697b87a-000d00fa,fddc8763-454e-4698-aaa0-e9035697b87a-000d0101,9187dec7-5541-47d2-bbca-902e4c424360-000d01c8,d4a0e6ef-b923-47bf-be0b-bc1e44e2a093-000d01fc,c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eedcf,c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eee29,c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eee7e,c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eeee4,c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eef32,c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eefbb,c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eefbc,c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eefbd,c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eefbe,c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eefbf,c6a7db2f-81c5-4061-9fc8-c41e336a4735-000ef129,a0cac1d8-57a1-4ff7-868c-036e7ba2778c-000ef2ca,7f6a8bf2-74fd-4b8c-a3be-9011a5071b48-000f13bb,7f6a8bf2-74fd-4b8c-a3be-9011a5071b48-000f13bd,7f6a8bf2-74fd-4b8c-a3be-9011a5071b48-000f13be,7f6a8bf2-74fd-4b8c-a3be-9011a5071b48-000f13dc,7f6a8bf2-74fd-4b8c-a3be-9011a5071b48-000f13dd,39d319ca-bc93-44e9-93ae-742b99aa0c24-000f1449,10a19c85-0732-4d4d-9b6c-1c7398fe9bad-000f1c30,10a19c85-0732-4d4d-9b6c-1c7398fe9bad-000f1cfb,10a19c85-0732-4d4d-9b6c-1c7398fe9bad-000f1d4e,10a19c85-0732-4d4d-9b6c-1c7398fe9bad-000f1dd4,993a70ac-243a-4c2f-9245-aa7bbab543e8-000f24b4,b4308e60-1335-4a48-9f05-822cd999e994-00101570,b4308e60-1335-4a48-9f05-822cd999e994-00101571,1631d04f-b6b9-4736-9b94-0c036d5b30c9-00106fb4,9ab504fd-f2ee-4332-b581-f72356d6de5e-001430c3,9ab504fd-f2ee-4332-b581-f72356d6de5e-001430c5,9ab504fd-f2ee-4332-b581-f72356d6de5e-001430c7,100e28b7-2ebd-4c88-9bbd-864f60c3cf26-00144453,ffcc1305-341a-4eed-b483-f7b6b2c4d0d9-00156f76,16cc8bb1-a415-4d6f-be6c-4b3dc42346b6-00157830,41eda6c7-ca70-406f-a7c1-5846650475ec-001715a8,41eda6c7-ca70-406f-a7c1-5846650475ec-001715a9,c2ac9238-a7bf-4623-9fe7-07c1f562cb4a-00171cb2,c2ac9238-a7bf-4623-9fe7-07c1f562cb4a-00171cfe,c46b076c-f24b-419e-bf63-8eee593f49d6-00172d7e,f7941cd2-3acc-422b-926a-c13c8908e951-00182c24,f7941cd2-3acc-422b-926a-c13c8908e951-00182c44,f7941cd2-3acc-422b-926a-c13c8908e951-00182c4e,0aaa7d94-bf8a-478c-b207-58db39dfa531-0018303d,435dee03-d0ec-440b-928d-79ae07d0a3c0-001831b0,48cb0f1b-8898-4415-819d-366d07744be6-001a8377,48cb0f1b-8898-4415-819d-366d07744be6-001a8379,2fcfc8e7-5462-4c9d-86f9-f45b6d7ad53f-001b9235,4c2087c7-1d73-48a9-b3de-4e5924a47f45-001d27e8,4c2087c7-1d73-48a9-b3de-4e5924a47f45-001d3231,33242b1f-8513-4e00-8e14-c016f03e8e79-001d5a36,674e273e-0577-4d60-912e-a24a9b898248-001d671d,5f8c2f21-a190-49dd-885f-874e884585de-001e175e,f0e78666-ecc4-4366-abdd-b4919127a56b-002375a1,f0e78666-ecc4-4366-abdd-b4919127a56b-002375b4,63165a93-fc79-4178-bb97-7dad3df9c51e-0024da0a,a28888a3-03e2-482e-ba99-1d56308c698f-00266055,a28888a3-03e2-482e-ba99-1d56308c698f-002660ab,c96c6db7-e696-4932-87da-b0b51fc19b8c-00270558,c96c6db7-e696-4932-87da-b0b51fc19b8c-00270670,c96c6db7-e696-4932-87da-b0b51fc19b8c-002706c3,a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-002719d2,a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-00271c44,a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-00271ce7,a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-00271d78,a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-00272594,a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-002725c4,a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-00273a68,527cd260-8f51-45fb-a5dd-ac27b49cd4c1-002a2f6f,cf7dc250-1991-4b6d-8d09-83598e0b97be-002aac3c,98f7678a-081d-4182-8328-5200cd96545d-002b00d2,98f7678a-081d-4182-8328-5200cd96545d-002b00d7,98f7678a-081d-4182-8328-5200cd96545d-002b00dc,98f7678a-081d-4182-8328-5200cd96545d-002b00ea,98f7678a-081d-4182-8328-5200cd96545d-002b00eb,98f7678a-081d-4182-8328-5200cd96545d-002b00ec,98f7678a-081d-4182-8328-5200cd96545d-002b00ed,98f7678a-081d-4182-8328-5200cd96545d-002b00ee,98f7678a-081d-4182-8328-5200cd96545d-002b00f9,98f7678a-081d-4182-8328-5200cd96545d-002b00fa,98f7678a-081d-4182-8328-5200cd96545d-002b00fb,98f7678a-081d-4182-8328-5200cd96545d-002b00ff,98f7678a-081d-4182-8328-5200cd96545d-002b0100,98f7678a-081d-4182-8328-5200cd96545d-002b0101,98f7678a-081d-4182-8328-5200cd96545d-002b0102",
+      "Description": "從 Revit 文件中選取多個元素。",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "2425b5ac4ebd471d9a210f295d64fbc1",
+      "Name": "標註間距_內層 (柱與網格)",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "300",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 100.0,
+      "NumberType": "Double",
+      "Description": "產生數值",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "714a461db38e4f558fcf86ff87262036",
+      "Name": " X向-柱標註位置 (否↓ / 是 ↑)",
+      "Type": "boolean",
+      "Type2": "boolean",
+      "Value": "true",
+      "Description": "啟用在 True 與 False 之間選取",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "3a27376d75854343a1c8233dd2e4dd0f",
+      "Name": " Y向-柱標註位置 (否← / 是→)",
+      "Type": "boolean",
+      "Type2": "boolean",
+      "Value": "true",
+      "Description": "啟用在 True 與 False 之間選取",
+      "SelectedIndex": 0
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "888dd19c9c9e4597897a68889a84e62b",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4301e1b229f14799a2295200a68d8332",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "FT-DIM-COL(TXT_4mm)"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 300.0,
+      "StepValue": 100.0,
+      "Id": "1331a7c2e33b4c1b9a824334f08c0f0b",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "334e223ed2bb406489598d0e874ba8ae",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 700.0
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "693a3c8bd2964ed2926479f5d7df5646",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "51ab0f1cbbaa43cabd61e26cfccf39a2",
+          "Name": "",
+          "Description": "表示式在第 1 行的值",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "允許直接編寫 DesignScript 程式碼",
+      "Code": "1;"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "WatchWidth": 170.0,
+      "WatchHeight": 38.0,
+      "Id": "da21ae715aee4c1b932e53d029734ceb",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "90ab419ebe7d4996acde5d6e1d424886",
+          "Name": "",
+          "Description": "要顯示其輸出的節點",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7eb8140145f448a4b7c3ff8d19fe2faf",
+          "Name": "",
+          "Description": "節點輸出",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "視覺化節點的輸出"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementsSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "84af3260-c6c8-4bdc-b757-787ae1695462-000caa45",
+        "84af3260-c6c8-4bdc-b757-787ae1695462-000caa4f",
+        "84af3260-c6c8-4bdc-b757-787ae1695462-000caa59",
+        "84af3260-c6c8-4bdc-b757-787ae1695462-000caa92",
+        "84af3260-c6c8-4bdc-b757-787ae1695462-000caa9c",
+        "d180521d-af6a-47ae-ad79-ce695b89ea64-000cf9b6",
+        "d180521d-af6a-47ae-ad79-ce695b89ea64-000cf9b8",
+        "d180521d-af6a-47ae-ad79-ce695b89ea64-000cf9c2",
+        "d180521d-af6a-47ae-ad79-ce695b89ea64-000cf9c4",
+        "d180521d-af6a-47ae-ad79-ce695b89ea64-000cf9ce",
+        "d180521d-af6a-47ae-ad79-ce695b89ea64-000cf9d0",
+        "f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfba9",
+        "f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfbb6",
+        "f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfc0e",
+        "f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfc10",
+        "f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfc21",
+        "f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfc23",
+        "f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfe4a",
+        "f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfe57",
+        "f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfea9",
+        "f2c4e33f-97f0-41b9-9dd2-aac8d810bc62-000cfeab",
+        "fddc8763-454e-4698-aaa0-e9035697b87a-000d00fa",
+        "fddc8763-454e-4698-aaa0-e9035697b87a-000d0101",
+        "9187dec7-5541-47d2-bbca-902e4c424360-000d01c8",
+        "d4a0e6ef-b923-47bf-be0b-bc1e44e2a093-000d01fc",
+        "c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eedcf",
+        "c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eee29",
+        "c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eee7e",
+        "c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eeee4",
+        "c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eef32",
+        "c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eefbb",
+        "c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eefbc",
+        "c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eefbd",
+        "c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eefbe",
+        "c6a7db2f-81c5-4061-9fc8-c41e336a4735-000eefbf",
+        "c6a7db2f-81c5-4061-9fc8-c41e336a4735-000ef129",
+        "a0cac1d8-57a1-4ff7-868c-036e7ba2778c-000ef2ca",
+        "7f6a8bf2-74fd-4b8c-a3be-9011a5071b48-000f13bb",
+        "7f6a8bf2-74fd-4b8c-a3be-9011a5071b48-000f13bd",
+        "7f6a8bf2-74fd-4b8c-a3be-9011a5071b48-000f13be",
+        "7f6a8bf2-74fd-4b8c-a3be-9011a5071b48-000f13dc",
+        "7f6a8bf2-74fd-4b8c-a3be-9011a5071b48-000f13dd",
+        "39d319ca-bc93-44e9-93ae-742b99aa0c24-000f1449",
+        "10a19c85-0732-4d4d-9b6c-1c7398fe9bad-000f1c30",
+        "10a19c85-0732-4d4d-9b6c-1c7398fe9bad-000f1cfb",
+        "10a19c85-0732-4d4d-9b6c-1c7398fe9bad-000f1d4e",
+        "10a19c85-0732-4d4d-9b6c-1c7398fe9bad-000f1dd4",
+        "993a70ac-243a-4c2f-9245-aa7bbab543e8-000f24b4",
+        "b4308e60-1335-4a48-9f05-822cd999e994-00101570",
+        "b4308e60-1335-4a48-9f05-822cd999e994-00101571",
+        "1631d04f-b6b9-4736-9b94-0c036d5b30c9-00106fb4",
+        "9ab504fd-f2ee-4332-b581-f72356d6de5e-001430c3",
+        "9ab504fd-f2ee-4332-b581-f72356d6de5e-001430c5",
+        "9ab504fd-f2ee-4332-b581-f72356d6de5e-001430c7",
+        "100e28b7-2ebd-4c88-9bbd-864f60c3cf26-00144453",
+        "ffcc1305-341a-4eed-b483-f7b6b2c4d0d9-00156f76",
+        "16cc8bb1-a415-4d6f-be6c-4b3dc42346b6-00157830",
+        "41eda6c7-ca70-406f-a7c1-5846650475ec-001715a8",
+        "41eda6c7-ca70-406f-a7c1-5846650475ec-001715a9",
+        "c2ac9238-a7bf-4623-9fe7-07c1f562cb4a-00171cb2",
+        "c2ac9238-a7bf-4623-9fe7-07c1f562cb4a-00171cfe",
+        "c46b076c-f24b-419e-bf63-8eee593f49d6-00172d7e",
+        "f7941cd2-3acc-422b-926a-c13c8908e951-00182c24",
+        "f7941cd2-3acc-422b-926a-c13c8908e951-00182c44",
+        "f7941cd2-3acc-422b-926a-c13c8908e951-00182c4e",
+        "0aaa7d94-bf8a-478c-b207-58db39dfa531-0018303d",
+        "435dee03-d0ec-440b-928d-79ae07d0a3c0-001831b0",
+        "48cb0f1b-8898-4415-819d-366d07744be6-001a8377",
+        "48cb0f1b-8898-4415-819d-366d07744be6-001a8379",
+        "2fcfc8e7-5462-4c9d-86f9-f45b6d7ad53f-001b9235",
+        "4c2087c7-1d73-48a9-b3de-4e5924a47f45-001d27e8",
+        "4c2087c7-1d73-48a9-b3de-4e5924a47f45-001d3231",
+        "33242b1f-8513-4e00-8e14-c016f03e8e79-001d5a36",
+        "674e273e-0577-4d60-912e-a24a9b898248-001d671d",
+        "5f8c2f21-a190-49dd-885f-874e884585de-001e175e",
+        "f0e78666-ecc4-4366-abdd-b4919127a56b-002375a1",
+        "f0e78666-ecc4-4366-abdd-b4919127a56b-002375b4",
+        "63165a93-fc79-4178-bb97-7dad3df9c51e-0024da0a",
+        "a28888a3-03e2-482e-ba99-1d56308c698f-00266055",
+        "a28888a3-03e2-482e-ba99-1d56308c698f-002660ab",
+        "c96c6db7-e696-4932-87da-b0b51fc19b8c-00270558",
+        "c96c6db7-e696-4932-87da-b0b51fc19b8c-00270670",
+        "c96c6db7-e696-4932-87da-b0b51fc19b8c-002706c3",
+        "a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-002719d2",
+        "a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-00271c44",
+        "a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-00271ce7",
+        "a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-00271d78",
+        "a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-00272594",
+        "a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-002725c4",
+        "a78d9cf2-154d-4f1b-9e0c-1b3270fa9ab5-00273a68",
+        "527cd260-8f51-45fb-a5dd-ac27b49cd4c1-002a2f6f",
+        "cf7dc250-1991-4b6d-8d09-83598e0b97be-002aac3c",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b00d2",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b00d7",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b00dc",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b00ea",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b00eb",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b00ec",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b00ed",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b00ee",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b00f9",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b00fa",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b00fb",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b00ff",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b0100",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b0101",
+        "98f7678a-081d-4182-8328-5200cd96545d-002b0102"
+      ],
+      "Id": "25c491df72f244e29a3b3ed7d1b50a9e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "6ea8f10d561c4c16b3b052c02c7ee2d6",
+          "Name": "Elements",
+          "Description": "選取的元素。",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "從 Revit 文件中選取多個元素。"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import math\r\nfrom Autodesk.Revit.DB import FilteredElementCollector, DimensionType\r\nfrom Autodesk.Revit.DB import Options, ViewDetailLevel, GeometryInstance, Solid\r\nfrom Autodesk.Revit.DB import PlanarFace, Line, XYZ, ReferenceArray, Reference\r\nfrom Autodesk.Revit.DB import BuiltInCategory, BuiltInParameter\r\nfrom Autodesk.Revit.DB import UnitUtils, UnitTypeId\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nview = doc.ActiveView\r\n\r\n# --- 1. 取得輸入參數 ---\r\nraw_elems = IN[0] if isinstance(IN[0], list) else [IN[0]]\r\ndim_type_name = IN[1]\r\ndist_far = float(IN[2]) if IN[2] is not None else 1000.0   # 外層 (70-305)\r\ndist_near = float(IN[3]) if IN[3] is not None else 600.0   # 內層 (35/35)\r\n\r\n# --- 2. 方向控制 (Boolean 切換) ---\r\n# True = 正向 (1), False = 負向 (-1)\r\nSIDE_X = 1 if IN[5] is True else -1\r\nSIDE_Y = 1 if IN[6] is True else -1\r\n\r\ndef ft(mm):\r\n    return UnitUtils.ConvertToInternalUnits(mm, UnitTypeId.Millimeters)\r\n\r\nD_NEAR = ft(dist_near) \r\nD_FAR = ft(dist_far)   \r\n\r\ndef unwrap(x):\r\n    return x.InternalElement if hasattr(x, 'InternalElement') else x\r\n\r\n# 獲取標註類型\r\nall_dt = list(FilteredElementCollector(doc).OfClass(DimensionType).ToElements())\r\ndim_type = next((dt for dt in all_dt if dt.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString() == dim_type_name), None)\r\nif dim_type is None and all_dt: dim_type = all_dt[0]\r\n\r\n# 分類元件\r\ncols = []; grids_x = []; grids_y = []\r\nfor raw in raw_elems:\r\n    elem = unwrap(raw)\r\n    if elem is None: continue\r\n    cat_id = elem.Category.Id.IntegerValue\r\n    if cat_id in [int(BuiltInCategory.OST_StructuralColumns), int(BuiltInCategory.OST_Columns)]:\r\n        cols.append(elem)\r\n    elif cat_id == int(BuiltInCategory.OST_Grids):\r\n        c = elem.Curve\r\n        if isinstance(c, Line):\r\n            gd = c.Direction.Normalize()\r\n            if abs(gd.Y) > 0.7: grids_x.append(elem) # 垂直網格\r\n            elif abs(gd.X) > 0.7: grids_y.append(elem) # 水平網格\r\n\r\n# --- 強化搜尋函數：找尋最近的網格 ---\r\ndef get_nearest_grid_ref(target_pos, grids, axis):\r\n    nearest_ref = None\r\n    min_dist = ft(300) # 30cm 搜尋半徑\r\n    for g in grids:\r\n        g_pos = g.Curve.GetEndPoint(0).X if axis == 'X' else g.Curve.GetEndPoint(0).Y\r\n        dist = abs(g_pos - target_pos)\r\n        if dist < min_dist:\r\n            min_dist = dist\r\n            nearest_ref = Reference(g)\r\n    return nearest_ref\r\n\r\ndef get_face_refs(col_elem, normal_dir):\r\n    opts = Options(); opts.ComputeReferences = True; opts.DetailLevel = ViewDetailLevel.Fine\r\n    faces = []\r\n    try:\r\n        geo = col_elem.get_Geometry(opts)\r\n        for g_obj in geo:\r\n            parts = list(g_obj.GetInstanceGeometry()) if isinstance(g_obj, GeometryInstance) else [g_obj]\r\n            for part in parts:\r\n                if isinstance(part, Solid) and part.Volume > 0:\r\n                    for face in part.Faces:\r\n                        if isinstance(face, PlanarFace):\r\n                            dot = face.FaceNormal.Normalize().DotProduct(normal_dir)\r\n                            if abs(dot) > 0.99: faces.append((face.Reference, face.Origin.DotProduct(normal_dir)))\r\n    except: pass\r\n    faces.sort(key=lambda x: x[1])\r\n    return faces \r\n\r\ndef group_elements(elements, axis, tol=ft(200)):\r\n    groups = []\r\n    for e in elements:\r\n        bbox = e.get_BoundingBox(view)\r\n        pos = (bbox.Min.Y + bbox.Max.Y)/2 if axis == 'X' else (bbox.Min.X + bbox.Max.X)/2\r\n        found = False\r\n        for g in groups:\r\n            if abs(g['pos'] - pos) < tol:\r\n                g['items'].append(e); found = True; break\r\n        if not found: groups.append({'pos': pos, 'items': [e]})\r\n    return groups\r\n\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n# --- X 方向邏輯 ---\r\nfor group in group_elements(cols, 'X'):\r\n    items = group['items']\r\n    ref_layer_far = [] \r\n    base_y = max(i.get_BoundingBox(view).Max.Y for i in items) if SIDE_X == 1 else min(i.get_BoundingBox(view).Min.Y for i in items)\r\n\r\n    for col in items:\r\n        bbox = col.get_BoundingBox(view); f_refs = get_face_refs(col, XYZ.BasisX)\r\n        if len(f_refs) < 2: continue\r\n        \r\n        mid_x = (bbox.Min.X + bbox.Max.X) / 2\r\n        col_grid_ref = get_nearest_grid_ref(mid_x, grids_x, 'X')\r\n\r\n        final_ref_near = ReferenceArray()\r\n        final_ref_near.Append(f_refs[0][0])\r\n        if col_grid_ref: final_ref_near.Append(col_grid_ref)\r\n        final_ref_near.Append(f_refs[-1][0])\r\n        \r\n        y_loc_near = base_y + (SIDE_X * D_NEAR)\r\n        ln_near = Line.CreateBound(XYZ(bbox.Min.X, y_loc_near, 0), XYZ(bbox.Max.X, y_loc_near, 0))\r\n        try:\r\n            dn = doc.Create.NewDimension(view, ln_near, final_ref_near)\r\n            if dim_type: dn.DimensionType = dim_type\r\n        except: pass\r\n            \r\n        ref_layer_far.append((f_refs[0][0], f_refs[0][1]))\r\n        ref_layer_far.append((f_refs[-1][0], f_refs[-1][1]))\r\n    \r\n    ref_layer_far.sort(key=lambda x: x[1])\r\n    final_ref_far = ReferenceArray(); lp = None\r\n    for r, p in ref_layer_far:\r\n        if lp is None or abs(p - lp) > ft(5): final_ref_far.Append(r); lp = p\r\n    \r\n    y_loc_far = base_y + (SIDE_X * D_FAR)\r\n    ln_far = Line.CreateBound(XYZ(min(i.get_BoundingBox(view).Min.X for i in items), y_loc_far, 0), \r\n                               XYZ(max(i.get_BoundingBox(view).Max.X for i in items), y_loc_far, 0))\r\n    try:\r\n        df = doc.Create.NewDimension(view, ln_far, final_ref_far)\r\n        if dim_type: df.DimensionType = dim_type\r\n    except: pass\r\n\r\n# --- Y 方向邏輯 (垂直) ---\r\nfor group in group_elements(cols, 'Y'):\r\n    items = group['items']\r\n    ref_layer_far_y = []\r\n    base_x = max(i.get_BoundingBox(view).Max.X for i in items) if SIDE_Y == 1 else min(i.get_BoundingBox(view).Min.X for i in items)\r\n\r\n    for col in items:\r\n        bbox = col.get_BoundingBox(view); f_refs = get_face_refs(col, XYZ.BasisY)\r\n        if len(f_refs) < 2: continue\r\n\r\n        mid_y = (bbox.Min.Y + bbox.Max.Y) / 2\r\n        col_grid_ref_y = get_nearest_grid_ref(mid_y, grids_y, 'Y')\r\n\r\n        final_ref_near_y = ReferenceArray()\r\n        final_ref_near_y.Append(f_refs[0][0])\r\n        if col_grid_ref_y: final_ref_near_y.Append(col_grid_ref_y)\r\n        final_ref_near_y.Append(f_refs[-1][0])\r\n        \r\n        x_loc_near = base_x + (SIDE_Y * D_NEAR)\r\n        ln_near_y = Line.CreateBound(XYZ(x_loc_near, bbox.Min.Y, 0), XYZ(x_loc_near, bbox.Max.Y, 0))\r\n        try:\r\n            dn_y = doc.Create.NewDimension(view, ln_near_y, final_ref_near_y)\r\n            if dim_type: dn_y.DimensionType = dim_type\r\n        except: pass\r\n\r\n        ref_layer_far_y.append((f_refs[0][0], f_refs[0][1]))\r\n        ref_layer_far_y.append((f_refs[-1][0], f_refs[-1][1]))\r\n    \r\n    ref_layer_far_y.sort(key=lambda x: x[1])\r\n    final_ref_far_y = ReferenceArray(); lp = None\r\n    for r, p in ref_layer_far_y:\r\n        if lp is None or abs(p - lp) > ft(5): final_ref_far_y.Append(r); lp = p\r\n            \r\n    x_loc_far = base_x + (SIDE_Y * D_FAR)\r\n    ln_far_y = Line.CreateBound(XYZ(x_loc_far, min(i.get_BoundingBox(view).Min.Y for i in items), 0), \r\n                                 XYZ(x_loc_far, max(i.get_BoundingBox(view).Max.Y for i in items), 0))\r\n    try:\r\n        df_y = doc.Create.NewDimension(view, ln_far_y, final_ref_far_y)\r\n        if dim_type: df_y.DimensionType = dim_type\r\n    except: pass\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\nOUT = \"成功：已更新為 Boolean 方向控制\"",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "8960595a8421405da669735f1a98f2f4",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "5acea58d13c943ccabc4a426224be31e",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fc472dea987a491f9a7ba91932c26e39",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1997c482e63e499180eab7311684b465",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "31d7117ae64d428eab177b793d80fe6c",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8f2910fe8d614746a133106f59e08049",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f2c8d744cafc44a3981cec44816bfe92",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "82bd3f4352be4873beb6aa0b60ab9ed9",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7eb8e3a6581741018df7c9adb4250302",
+          "Name": "OUT",
+          "Description": "Python 指令碼的結果",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "執行嵌入的 Python 指令碼。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 100.0,
+      "Id": "2425b5ac4ebd471d9a210f295d64fbc1",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2148c4074e844741808dd0c72f365960",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 300.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NumberType": "Integer",
+      "MaximumValue": 1,
+      "MinimumValue": -1,
+      "StepValue": 2,
+      "Id": "2db0b7a90d8045cb8a74528f042646a3",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "38b48e701f2e43d496ef672939285cb0",
+          "Name": "",
+          "Description": "Int64",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生整數值",
+      "InputValue": 1
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NumberType": "Integer",
+      "MaximumValue": 1,
+      "MinimumValue": -1,
+      "StepValue": 2,
+      "Id": "e62450b0d4f24a78a1714cda4f3d61a7",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "6fb254ec0a884d77b8cb0a27d1f16d72",
+          "Name": "",
+          "Description": "Int64",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生整數值",
+      "InputValue": 1
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "714a461db38e4f558fcf86ff87262036",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b10ab01fb0b148028abcdb285907c122",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": true
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "3a27376d75854343a1c8233dd2e4dd0f",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "25a16a4b704b49bbac86ee73f0720e3a",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": true
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "4301e1b229f14799a2295200a68d8332",
+      "End": "fc472dea987a491f9a7ba91932c26e39",
+      "Id": "70fa64af8e13471e9e44b0031e74632d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "334e223ed2bb406489598d0e874ba8ae",
+      "End": "1997c482e63e499180eab7311684b465",
+      "Id": "54bcf07793dc47fcbccd7e4ec2d08b03",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "51ab0f1cbbaa43cabd61e26cfccf39a2",
+      "End": "8f2910fe8d614746a133106f59e08049",
+      "Id": "b3fe18dacd644ba0b244f72062bcb5df",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "6ea8f10d561c4c16b3b052c02c7ee2d6",
+      "End": "5acea58d13c943ccabc4a426224be31e",
+      "Id": "c40ee31b072e46cb9a36a009a3e40167",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "7eb8e3a6581741018df7c9adb4250302",
+      "End": "90ab419ebe7d4996acde5d6e1d424886",
+      "Id": "7ba36fd12dbe484e8011399622047eb8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2148c4074e844741808dd0c72f365960",
+      "End": "31d7117ae64d428eab177b793d80fe6c",
+      "Id": "e6a3128c381f4ce58e78c881ea9003e6",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b10ab01fb0b148028abcdb285907c122",
+      "End": "f2c8d744cafc44a3981cec44816bfe92",
+      "Id": "efc84824d2454bf0b2745e76aaeb2790",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "25a16a4b704b49bbac86ee73f0720e3a",
+      "End": "82bd3f4352be4873beb6aa0b60ab9ed9",
+      "Id": "02cbdda0c96d4579bea7e7dae46954a9",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "性質",
+      "Version": "2.19",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.1",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "無",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.19.3.6394",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "背景預覽(_B)",
+      "EyeX": -16.423776395906014,
+      "EyeY": 17.79242442889818,
+      "EyeZ": 79.38158591354572,
+      "LookX": 16.423776395906014,
+      "LookY": -17.79242442889818,
+      "LookZ": -79.38158591354572,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "888dd19c9c9e4597897a68889a84e62b",
+        "Name": "2.標註類型(預設)",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 34.1840772000707,
+        "Y": 198.76082446598838
+      },
+      {
+        "Id": "1331a7c2e33b4c1b9a824334f08c0f0b",
+        "Name": "標註間距_外層 (總寬總高)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 29.058943693792173,
+        "Y": 344.0524466305622
+      },
+      {
+        "Id": "693a3c8bd2964ed2926479f5d7df5646",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 29.058943693792173,
+        "Y": 638.87994663056224
+      },
+      {
+        "Id": "da21ae715aee4c1b932e53d029734ceb",
+        "Name": "Watch",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 769.85109988348,
+        "Y": 322.55084455522
+      },
+      {
+        "Id": "25c491df72f244e29a3b3ed7d1b50a9e",
+        "Name": "  框選[網格]&[柱]",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 21.765830397039451,
+        "Y": -39.999346446707136
+      },
+      {
+        "Id": "8960595a8421405da669735f1a98f2f4",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 553.51579645005972,
+        "Y": 360.9420464107078
+      },
+      {
+        "Id": "2425b5ac4ebd471d9a210f295d64fbc1",
+        "Name": "標註間距_內層 (柱與網格)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 28.188404764596157,
+        "Y": 491.92298555975827
+      },
+      {
+        "Id": "2db0b7a90d8045cb8a74528f042646a3",
+        "Name": "X向方向 (← -1 / +1 →)",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 822.54967038049176,
+        "Y": 745.21101216874683
+      },
+      {
+        "Id": "e62450b0d4f24a78a1714cda4f3d61a7",
+        "Name": "Y向-柱標註位置 (否← / 是→)",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 823.3918205765176,
+        "Y": 880.08340823459184
+      },
+      {
+        "Id": "714a461db38e4f558fcf86ff87262036",
+        "Name": " X向-柱標註位置 (否↓ / 是 ↑)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 14.450246549715985,
+        "Y": 794.83301784445757
+      },
+      {
+        "Id": "3a27376d75854343a1c8233dd2e4dd0f",
+        "Name": " Y向-柱標註位置 (否← / 是→)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 9.6629148834538228,
+        "Y": 943.98565676198336
+      }
+    ],
+    "Annotations": [],
+    "X": 73.9391186135525,
+    "Y": 153.07091439281749,
+    "Zoom": 0.47996013552121847
+  }
+}

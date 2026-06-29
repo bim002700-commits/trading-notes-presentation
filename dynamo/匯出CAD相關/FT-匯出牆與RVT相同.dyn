@@ -1,0 +1,159 @@
+{
+  "Uuid": "01ec7f5c-5e5b-4d3b-88c8-69f58bfbcae8",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "FT-匯出牆與RVT相同#",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "6ec2c71dbab546f98d540324bfdaa252",
+      "Name": "匯出存放路徑",
+      "Type": "string",
+      "Type2": "string",
+      "Value": "D:\\dynamo\\匯出cad",
+      "Description": "建立一個字串。",
+      "SelectedIndex": 0
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr, os, re\r\nclr.AddReference('RevitAPI')\r\nclr.AddReference('RevitServices')\r\nfrom Autodesk.Revit.DB import *\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\nfrom System.Collections.Generic import List\r\n\r\ndoc   = DocumentManager.Instance.CurrentDBDocument\r\nuidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\n\r\nexport_folder = IN[0]\r\nif not os.path.exists(export_folder):\r\n    os.makedirs(export_folder)\r\n\r\nsource_view = uidoc.ActiveView\r\ndup_opt = None\r\nfor opt in (ViewDuplicateOption.WithDetailing, ViewDuplicateOption.Duplicate):\r\n    if source_view.CanViewBeDuplicated(opt):\r\n        dup_opt = opt\r\n        break\r\n\r\nif dup_opt is None:\r\n    OUT = [f\"視圖「{source_view.Name}」無法複製\"]\r\n    raise Exception(OUT[0])\r\n\r\n# 只收集當前視圖的牆（排除視圖專屬元素與群組內牆）\r\nwalls = [w for w in\r\n    FilteredElementCollector(doc, source_view.Id)\r\n    .OfClass(Wall).WhereElementIsNotElementType().ToElements()\r\n    if not w.ViewSpecific and w.GroupId == ElementId.InvalidElementId]\r\n\r\nif not walls:\r\n    OUT = [\"沒有牆元素\"]\r\n    raise Exception(OUT[0])\r\n\r\n# 依牆類型名稱分組\r\ntype_map = {}\r\nfor w in walls:\r\n    try: type_map.setdefault(w.Name, []).append(w.Id)\r\n    except: pass\r\n\r\ndef clean_name(n):\r\n    return re.sub(r'[\\\\/:*?\"<>|]', '_', n)[:50]\r\n\r\nresults = []\r\n\r\nfor tname, keep_ids in type_map.items():\r\n    # 建立暫時視圖，只顯示此牆類型\r\n    TransactionManager.Instance.EnsureInTransaction(doc)\r\n    tmp_vid  = source_view.Duplicate(dup_opt)\r\n    tmp_view = doc.GetElement(tmp_vid)\r\n    try:\r\n        tmp_view.DisableTemporaryViewMode(TemporaryViewMode.TemporaryHideIsolate)\r\n    except:\r\n        pass\r\n    # 隔離目標牆 → 轉為永久隱藏（其餘全部隱藏）\r\n    tmp_view.IsolateElementsTemporary(List[ElementId](keep_ids))\r\n    tmp_view.ConvertTemporaryHideIsolateToPermanent()\r\n    TransactionManager.Instance.TransactionTaskDone()\r\n\r\n    # 匯出 DXF（Transaction 外執行）\r\n    opts = DXFExportOptions()\r\n    opts.FileVersion = ACADVersion.R2013\r\n    safe = clean_name(tname)\r\n    try:\r\n        ok = doc.Export(export_folder, safe, List[ElementId]([tmp_vid]), opts)\r\n        results.append(f\"{'OK' if ok else 'FAIL'}: {safe}.dxf\")\r\n    except Exception as e:\r\n        results.append(f\"FAIL: {tname} → {str(e)[:80]}\")\r\n\r\n    # 刪除暫時視圖\r\n    TransactionManager.Instance.EnsureInTransaction(doc)\r\n    try: doc.Delete(tmp_vid)\r\n    except: pass\r\n    TransactionManager.Instance.TransactionTaskDone()\r\n\r\nOUT = [f\"視圖：{source_view.Name}，共 {len(type_map)} 種\", results]",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "2e76db9d1f0f400d9a31de8d4c428d5d",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "18035d9f35a645aeaf56d7afad633f85",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "98d1e690020d4a3383783b876fb3fd76",
+          "Name": "OUT",
+          "Description": "Python 指令碼的結果",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "執行嵌入的 Python 指令碼。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "6ec2c71dbab546f98d540324bfdaa252",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "896011e2ae3346d09cf6a281269953b5",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "D:\\dynamo\\匯出cad"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "896011e2ae3346d09cf6a281269953b5",
+      "End": "18035d9f35a645aeaf56d7afad633f85",
+      "Id": "0c65526793a241439bd3889955e41ee7",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "性質",
+      "Version": "2.19",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.1",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "無",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.19.3.6394",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "背景預覽(_B)",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "2e76db9d1f0f400d9a31de8d4c428d5d",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 191.0,
+        "Y": 206.0
+      },
+      {
+        "Id": "6ec2c71dbab546f98d540324bfdaa252",
+        "Name": "匯出存放路徑",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -90.657573997474572,
+        "Y": 204.94707766707558
+      }
+    ],
+    "Annotations": [],
+    "X": 182.88279326731927,
+    "Y": -1.3077770740806614,
+    "Zoom": 0.95404292488281262
+  }
+}

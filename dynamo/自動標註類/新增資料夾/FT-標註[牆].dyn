@@ -1,0 +1,522 @@
+{
+  "Uuid": "ee030338-31cf-4224-8e9a-bcbd05e267ca",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "FT-標註[牆]",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "d7edd05ef26c4208a4984fb106aeee81",
+      "Name": " 框選[網格]&[牆]",
+      "Type": "selection",
+      "Type2": "hostSelection",
+      "Value": "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000edd54,15e4b5d2-7816-4822-9a6f-582621dd7f1f-000eddc5,0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb49,0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb4c,0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb4d,0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb4e,0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb53,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00111714,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00111b27,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00111f5a,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00111faa,8440d9f5-2fea-4729-8d6e-5b3dd6aca467-0015b423,36cfe4e1-c4f6-4d27-b1b4-279ba311d9c4-00166e8e,302d37e5-0712-4144-9144-6bb8ea052c5d-001e1b1e,e4b3f972-04f3-44b4-a701-6d57cef0a7b6-0021a363,69c9732e-b82f-4a54-ab89-d39e8f07549d-0026045e,69c9732e-b82f-4a54-ab89-d39e8f07549d-00260462,69c9732e-b82f-4a54-ab89-d39e8f07549d-0026046a",
+      "Description": "從 Revit 文件中選取多個元素。",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "add617875a8e4662844a29eba5dfa101",
+      "Name": "標註與牆的間距(預設)",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "300",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 100.0,
+      "NumberType": "Double",
+      "Description": "產生數值",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "b2622677a0524d87820b57a3dfaedfdb",
+      "Name": " X向-牆標註位置(否↓ / 是↑)",
+      "Type": "boolean",
+      "Type2": "boolean",
+      "Value": "true",
+      "Description": "啟用在 True 與 False 之間選取",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "072617e8706e4216bbc9aff23cbcd9cd",
+      "Name": " Y向-牆標註位置 (否← / 是→)",
+      "Type": "boolean",
+      "Type2": "boolean",
+      "Value": "true",
+      "Description": "啟用在 True 與 False 之間選取",
+      "SelectedIndex": 0
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "0aa40ff0684447a89a9d2966f21a3592",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "30370db683634b1a94e2dc19b0809a30",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "FT-DIM-WALL(TXT_4.0mm)"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 300.0,
+      "StepValue": 100.0,
+      "Id": "847080b2a7f6444b8be8232bb3a38632",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "6c9103dbc8734acb8f675773bea99852",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 1000.0
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "40e3835acd2b437ea0cb9d86cb894e57",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "6c9065f5fca44882871fc954753b4f27",
+          "Name": "",
+          "Description": "表示式在第 1 行的值",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "允許直接編寫 DesignScript 程式碼",
+      "Code": "1;"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "WatchWidth": 170.0,
+      "WatchHeight": 38.0,
+      "Id": "2541c9fa594a4542859794e32cb26292",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "f4feb5b887d0491e9d94b22f256ff1d1",
+          "Name": "",
+          "Description": "要顯示其輸出的節點",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5231235e56ed4df5874226ed15ab7e81",
+          "Name": "",
+          "Description": "節點輸出",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "視覺化節點的輸出"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementsSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000edd54",
+        "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000eddc5",
+        "0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb49",
+        "0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb4c",
+        "0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb4d",
+        "0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb4e",
+        "0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb53",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00111714",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00111b27",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00111f5a",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00111faa",
+        "8440d9f5-2fea-4729-8d6e-5b3dd6aca467-0015b423",
+        "36cfe4e1-c4f6-4d27-b1b4-279ba311d9c4-00166e8e",
+        "302d37e5-0712-4144-9144-6bb8ea052c5d-001e1b1e",
+        "e4b3f972-04f3-44b4-a701-6d57cef0a7b6-0021a363",
+        "69c9732e-b82f-4a54-ab89-d39e8f07549d-0026045e",
+        "69c9732e-b82f-4a54-ab89-d39e8f07549d-00260462",
+        "69c9732e-b82f-4a54-ab89-d39e8f07549d-0026046a"
+      ],
+      "Id": "d7edd05ef26c4208a4984fb106aeee81",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2faba457b4064e4ead184b9460d7a2d9",
+          "Name": "Elements",
+          "Description": "選取的元素。",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "從 Revit 文件中選取多個元素。"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import math\r\nfrom Autodesk.Revit.DB import FilteredElementCollector, DimensionType, Dimension\r\nfrom Autodesk.Revit.DB import Options, ViewDetailLevel, GeometryInstance, Solid\r\nfrom Autodesk.Revit.DB import PlanarFace, Line, XYZ, ReferenceArray, Reference\r\nfrom Autodesk.Revit.DB import BuiltInCategory, BuiltInParameter, LocationCurve\r\nfrom Autodesk.Revit.DB import UnitUtils, UnitTypeId\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nview = doc.ActiveView\r\n\r\n# --- 1. 參數 ---\r\nraw_elems     = IN[0] if isinstance(IN[0], list) else [IN[0]]\r\nwall_dim_name = \"FT-DIM-WALL(TXT_4.0mm)\"\r\nvoid_dim_name = \"FT-DIM-VOID(TXT_4.0mm)\"\r\ndist_near     = float(IN[3]) if IN[3] is not None else 600.0\r\nSIDE_X        = 1 if IN[5] is True else -1\r\nSIDE_Y        = 1 if IN[6] is True else -1\r\n\r\ndef ft(mm):\r\n    return UnitUtils.ConvertToInternalUnits(mm, UnitTypeId.Millimeters)\r\n\r\nD_NEAR        = ft(dist_near)\r\nMIN_SPAN      = ft(50)\r\nCORNER_TOL    = ft(100)\r\nDOOR_WIN_CATS = {int(BuiltInCategory.OST_Doors), int(BuiltInCategory.OST_Windows)}\r\n\r\ndef unwrap(x):\r\n    return x.InternalElement if hasattr(x, 'InternalElement') else x\r\n\r\ndef safe_type_name(elem):\r\n    try:\r\n        t = doc.GetElement(elem.GetTypeId())\r\n        if t and t.Name: return t.Name\r\n    except: pass\r\n    try:\r\n        n = elem.Name\r\n        if n: return n\r\n    except: pass\r\n    return \"\"\r\n\r\n# --- 2. 標註型式 ---\r\nall_dt = list(FilteredElementCollector(doc).OfClass(DimensionType).ToElements())\r\ndef find_dt(name):\r\n    dt = next((d for d in all_dt\r\n               if d.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString() == name), None)\r\n    return dt or (all_dt[0] if all_dt else None)\r\ndt_wall = find_dt(wall_dim_name)\r\ndt_void = find_dt(void_dim_name)\r\n\r\n# --- 3. 分類 ---\r\nh_walls = []; v_walls = []\r\nfor raw in raw_elems:\r\n    elem = unwrap(raw)\r\n    if elem is None: continue\r\n    try: cat_id = elem.Category.Id.IntegerValue\r\n    except: continue\r\n    if cat_id != int(BuiltInCategory.OST_Walls): continue\r\n    if \"RC\" not in safe_type_name(elem): continue\r\n    try:\r\n        lc = elem.Location\r\n        if isinstance(lc, LocationCurve):\r\n            p1 = lc.Curve.GetEndPoint(1); p0 = lc.Curve.GetEndPoint(0)\r\n            if abs(p1.X - p0.X) >= abs(p1.Y - p0.Y): h_walls.append(elem)\r\n            else: v_walls.append(elem)\r\n        else: h_walls.append(elem)\r\n    except: h_walls.append(elem)\r\n\r\n# --- 4. 輔助函式 ---\r\ndef collect_solid_faces(geo_iter, normal_dir, out, dot_tol=0.99):\r\n    for g_obj in geo_iter:\r\n        parts = [g_obj]\r\n        if isinstance(g_obj, GeometryInstance):\r\n            try: parts = list(g_obj.GetInstanceGeometry())\r\n            except: continue\r\n        for part in parts:\r\n            if isinstance(part, Solid) and part.Volume > 0:\r\n                for face in part.Faces:\r\n                    if isinstance(face, PlanarFace):\r\n                        dot = face.FaceNormal.Normalize().DotProduct(normal_dir)\r\n                        if abs(dot) > dot_tol:\r\n                            out.append((face.Reference, face.Origin.DotProduct(normal_dir)))\r\n\r\ndef get_all_faces_sorted(elem, normal_dir, tol_mm=10, dot_tol=0.99):\r\n    opts = Options(); opts.ComputeReferences = True; opts.DetailLevel = ViewDetailLevel.Fine\r\n    faces = []\r\n    try:\r\n        geo = elem.get_Geometry(opts)\r\n        if geo: collect_solid_faces(geo, normal_dir, faces, dot_tol)\r\n    except: pass\r\n    faces.sort(key=lambda x: x[1])\r\n    tol = ft(tol_mm); deduped = []\r\n    for f in faces:\r\n        if not deduped or abs(f[1] - deduped[-1][1]) > tol: deduped.append(f)\r\n    return deduped\r\n\r\ndef get_outer_two(faces):\r\n    return [faces[0], faces[-1]] if len(faces) >= 2 else faces\r\n\r\ndef find_face_near(faces, target, tol_mm=60):\r\n    tol = ft(tol_mm); best = None; best_d = tol\r\n    for ref, pos in faces:\r\n        d = abs(pos - target)\r\n        if d < best_d: best_d = d; best = ref\r\n    return best\r\n\r\ndef group_elements(elements, axis, tol=ft(500)):\r\n    groups = []\r\n    for e in elements:\r\n        try: bbox = e.get_BoundingBox(view)\r\n        except: continue\r\n        if not bbox: continue\r\n        pos = (bbox.Min.Y + bbox.Max.Y)/2 if axis=='X' else (bbox.Min.X + bbox.Max.X)/2\r\n        found = False\r\n        for g in groups:\r\n            if abs(g['pos'] - pos) < tol: g['items'].append(e); found = True; break\r\n        if not found: groups.append({'pos': pos, 'items': [e]})\r\n    return groups\r\n\r\ndef try_dim(p0, p1, ra, dt):\r\n    if ra.Size < 2: return False\r\n    if p0.DistanceTo(p1) < ft(1): return False\r\n    try:\r\n        d = doc.Create.NewDimension(view, Line.CreateBound(p0, p1), ra)\r\n        if d and dt: d.DimensionType = dt\r\n        return True\r\n    except: return False\r\n\r\ndef get_wall_actual_perp(wall, is_x):\r\n    \"\"\"取得牆的實際垂直方向（處理略微旋轉的牆）\"\"\"\r\n    try:\r\n        lc = wall.Location\r\n        if isinstance(lc, LocationCurve):\r\n            p0 = lc.Curve.GetEndPoint(0); p1 = lc.Curve.GetEndPoint(1)\r\n            dx = p1.X - p0.X; dy = p1.Y - p0.Y\r\n            ln = math.sqrt(dx*dx + dy*dy)\r\n            if ln > 1e-6:\r\n                return XYZ(-dy/ln, dx/ln, 0)\r\n    except: pass\r\n    return XYZ.BasisY if is_x else XYZ.BasisX\r\n\r\n# --- 5. 執行 ---\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n# 清除舊標註\r\nclear_ids = set()\r\nif dt_wall: clear_ids.add(dt_wall.Id.IntegerValue)\r\nif dt_void: clear_ids.add(dt_void.Id.IntegerValue)\r\nfor d in list(FilteredElementCollector(doc, view.Id).OfClass(Dimension).ToElements()):\r\n    try:\r\n        if d.DimensionType.Id.IntegerValue in clear_ids: doc.Delete(d.Id)\r\n    except: pass\r\n\r\ndef wall_span(wall, normal_dir, dot_tol=0.99):\r\n    faces = get_all_faces_sorted(wall, normal_dir, dot_tol=dot_tol)\r\n    outer = get_outer_two(faces)\r\n    if len(outer) < 2: return None\r\n    lo, hi = outer[0][1], outer[-1][1]\r\n    if (hi - lo) < MIN_SPAN: return None\r\n    return lo, hi, outer[0][0], outer[-1][0]\r\n\r\nh_spans = {}; v_spans = {}\r\nfor w in h_walls:\r\n    s = wall_span(w, XYZ.BasisX)\r\n    if s: h_spans[w] = s\r\nfor w in v_walls:\r\n    s = wall_span(w, XYZ.BasisY)\r\n    if s: v_spans[w] = s\r\n\r\ndef run_group(walls_list, normal_dir, is_x):\r\n    side       = SIDE_X if is_x else SIDE_Y\r\n    group_axis = 'X' if is_x else 'Y'\r\n    perp_dir   = XYZ.BasisY if is_x else XYZ.BasisX\r\n    spans_dict = h_spans if is_x else v_spans\r\n    adj_walls  = v_walls if is_x else h_walls\r\n    adj_dir    = XYZ.BasisY if is_x else XYZ.BasisX\r\n\r\n    for group in group_elements(walls_list, group_axis):\r\n        items  = group['items']\r\n        bboxes = [i.get_BoundingBox(view) for i in items]\r\n        bboxes = [b for b in bboxes if b]\r\n        if not bboxes: continue\r\n\r\n        base = (max(b.Max.Y for b in bboxes) if (is_x and side==1) else\r\n                min(b.Min.Y for b in bboxes) if is_x else\r\n                max(b.Max.X for b in bboxes) if side==1 else\r\n                min(b.Min.X for b in bboxes))\r\n        near_coord = base + side * D_NEAR\r\n\r\n        for item in items:\r\n            sp = spans_dict.get(item)\r\n            if not sp: continue\r\n            lo, hi, lo_r, hi_r = sp\r\n\r\n            # ── A. 牆長+開口連續標（直接用牆幾何所有法向面，含開口夾面）──\r\n            # 修正1：用 all_dir_faces 取代手動拼接 bbox，避免 \"0\" 及遺漏小段\r\n            all_dir_faces = get_all_faces_sorted(item, normal_dir)\r\n\r\n            # 只保留牆跨度範圍內的面（lo±5mm ~ hi±5mm）\r\n            span_faces = [(ref, pos) for ref, pos in all_dir_faces\r\n                          if lo - ft(5) <= pos <= hi + ft(5)]\r\n\r\n            # 確保兩端面存在\r\n            if not span_faces:\r\n                span_faces = [(lo_r, lo), (hi_r, hi)]\r\n            else:\r\n                if abs(span_faces[0][1] - lo) > ft(5):\r\n                    span_faces.insert(0, (lo_r, lo))\r\n                if abs(span_faces[-1][1] - hi) > ft(5):\r\n                    span_faces.append((hi_r, hi))\r\n\r\n            # 去重：確保相鄰位置差 > ft(5)，消除潛在 \"0\" 段\r\n            deduped = [span_faces[0]]\r\n            for ref, pos in span_faces[1:]:\r\n                if abs(pos - deduped[-1][1]) > ft(5):\r\n                    deduped.append((ref, pos))\r\n\r\n            if len(deduped) >= 2:\r\n                ra = ReferenceArray()\r\n                for ref, _ in deduped: ra.Append(ref)\r\n                p0 = XYZ(deduped[0][1],  near_coord, 0) if is_x else XYZ(near_coord, deduped[0][1],  0)\r\n                p1 = XYZ(deduped[-1][1], near_coord, 0) if is_x else XYZ(near_coord, deduped[-1][1], 0)\r\n                try_dim(p0, p1, ra, dt_wall)\r\n\r\n            # ── B. 開口 VOID 標 ──\r\n            try:\r\n                for ins_id in item.FindInserts(False, False, False, False):\r\n                    ins = doc.GetElement(ins_id)\r\n                    if ins is None: continue\r\n                    try: ins_cat = ins.Category.Id.IntegerValue\r\n                    except: continue\r\n                    if ins_cat not in DOOR_WIN_CATS: continue\r\n                    try:\r\n                        ins_bbox = ins.get_BoundingBox(view) or ins.get_BoundingBox(None)\r\n                        if not ins_bbox: continue\r\n                        i_lo = ins_bbox.Min.X if is_x else ins_bbox.Min.Y\r\n                        i_hi = ins_bbox.Max.X if is_x else ins_bbox.Max.Y\r\n                        if (i_hi - i_lo) < MIN_SPAN: continue\r\n                        r_lo = find_face_near(all_dir_faces, i_lo)\r\n                        r_hi = find_face_near(all_dir_faces, i_hi)\r\n                        if not r_lo or not r_hi: continue\r\n                        ra_v = ReferenceArray(); ra_v.Append(r_lo); ra_v.Append(r_hi)\r\n                        vp0 = XYZ(i_lo, near_coord, 0) if is_x else XYZ(near_coord, i_lo, 0)\r\n                        vp1 = XYZ(i_hi, near_coord, 0) if is_x else XYZ(near_coord, i_hi, 0)\r\n                        try_dim(vp0, vp1, ra_v, dt_void)\r\n                    except: continue\r\n            except: pass\r\n\r\n            # ── C. 牆厚（修正2：用實際法向 + dot_tol=0.95，處理 145 牆遺漏）──\r\n            actual_perp = get_wall_actual_perp(item, is_x)\r\n            th_faces_all = get_all_faces_sorted(item, actual_perp, tol_mm=5, dot_tol=0.95)\r\n            th_faces = get_outer_two(th_faces_all)\r\n            if len(th_faces) < 2: continue\r\n            t0, t1 = th_faces[0][1], th_faces[-1][1]\r\n            if (t1 - t0) < ft(1): continue\r\n\r\n            # ── D. 牆厚 + 鄰接垂直牆長連續（角落拼接）──\r\n            for end_pos in [lo, hi]:\r\n                for adj in adj_walls:\r\n                    adj_bbox = adj.get_BoundingBox(view)\r\n                    if not adj_bbox: continue\r\n                    if is_x:\r\n                        adj_range = (adj_bbox.Min.X, adj_bbox.Max.X)\r\n                        my_perp_range = (t0, t1)\r\n                    else:\r\n                        adj_range = (adj_bbox.Min.Y, adj_bbox.Max.Y)\r\n                        my_perp_range = (t0, t1)\r\n                    if adj_range[1] < my_perp_range[0] - CORNER_TOL: continue\r\n                    if adj_range[0] > my_perp_range[1] + CORNER_TOL: continue\r\n\r\n                    adj_sp = wall_span(adj, adj_dir)\r\n                    if not adj_sp: continue\r\n                    a_lo, a_hi, a_lo_r, a_hi_r = adj_sp\r\n\r\n                    matched = None\r\n                    if abs(a_lo - end_pos) < CORNER_TOL: matched = (a_lo_r, a_hi_r, a_lo, a_hi)\r\n                    elif abs(a_hi - end_pos) < CORNER_TOL: matched = (a_hi_r, a_lo_r, a_hi, a_lo)\r\n                    if not matched: continue\r\n\r\n                    near_t = t0 if abs(t0 - end_pos) < abs(t1 - end_pos) else t1\r\n                    far_t  = t1 if near_t == t0 else t0\r\n                    near_t_ref = th_faces[0][0] if th_faces[0][1] == near_t else th_faces[-1][0]\r\n                    far_t_ref  = th_faces[-1][0] if near_t_ref == th_faces[0][0] else th_faces[0][0]\r\n\r\n                    adj_start_r, adj_end_r, adj_start_p, adj_end_p = matched\r\n\r\n                    ra_c = ReferenceArray()\r\n                    ra_c.Append(far_t_ref)\r\n                    ra_c.Append(near_t_ref)\r\n                    ra_c.Append(adj_end_r)\r\n                    if is_x:\r\n                        cp0 = XYZ(near_coord, far_t,     0)\r\n                        cp1 = XYZ(near_coord, adj_end_p, 0)\r\n                    else:\r\n                        cp0 = XYZ(far_t,     near_coord, 0)\r\n                        cp1 = XYZ(adj_end_p, near_coord, 0)\r\n                    try_dim(cp0, cp1, ra_c, dt_wall)\r\n                    break\r\n\r\nrun_group(h_walls, XYZ.BasisX, True)\r\nrun_group(v_walls, XYZ.BasisY, False)\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\nOUT = \"完成 | 水平RC牆:{} 垂直RC牆:{}\".format(len(h_walls), len(v_walls))",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "11d5269ff06f47fd84e53e0fcca13e31",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "1a7621216d06410fb469f7d7cd61129d",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "06b8ee235c9d4fddaca5df727ba9f180",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e3b643bf6bcf4666b974674eddbe55cd",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6350bbedf1374ca19057a608f323f5dd",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1c5b05d745bb4a67b0ecb5f1bfa8910d",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0141394f775445f8b114e98d8abeba15",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e9e2d0677b414576b9f7f26f103d1689",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "53929eb9ac5340a7a212ac0217d6b288",
+          "Name": "OUT",
+          "Description": "Python 指令碼的結果",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "執行嵌入的 Python 指令碼。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 100.0,
+      "Id": "add617875a8e4662844a29eba5dfa101",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "9b92a9e9311b49d983adac1221f2e1ed",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 300.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "b2622677a0524d87820b57a3dfaedfdb",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "534f3e5c1f5142caaaf9f50bc8ba183d",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": true
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "072617e8706e4216bbc9aff23cbcd9cd",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "0bd56b37f2e248ebbf6c1a3b1865a009",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": true
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "6c9065f5fca44882871fc954753b4f27",
+      "End": "1c5b05d745bb4a67b0ecb5f1bfa8910d",
+      "Id": "4e74a8ab0e254e51908b5bebbd032159",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2faba457b4064e4ead184b9460d7a2d9",
+      "End": "1a7621216d06410fb469f7d7cd61129d",
+      "Id": "e9d07239c99448eca0c99cc3b3bddfa3",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "53929eb9ac5340a7a212ac0217d6b288",
+      "End": "f4feb5b887d0491e9d94b22f256ff1d1",
+      "Id": "ff7eed9a27464310ac78d2d203017028",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9b92a9e9311b49d983adac1221f2e1ed",
+      "End": "6350bbedf1374ca19057a608f323f5dd",
+      "Id": "70b91612ec774721baf5f137ad55e8c5",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "534f3e5c1f5142caaaf9f50bc8ba183d",
+      "End": "0141394f775445f8b114e98d8abeba15",
+      "Id": "37ad8885bacc418aa551786e89ad4276",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0bd56b37f2e248ebbf6c1a3b1865a009",
+      "End": "e9e2d0677b414576b9f7f26f103d1689",
+      "Id": "2375988a05f24348b995a99292d41e98",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "性質",
+      "Version": "2.19",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.1",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "無",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.19.3.6394",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "背景預覽(_B)",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "0aa40ff0684447a89a9d2966f21a3592",
+        "Name": "標註類型(key in)",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 29.0589436937922,
+        "Y": 198.13663416417
+      },
+      {
+        "Id": "847080b2a7f6444b8be8232bb3a38632",
+        "Name": "間距_外層 (總寬總高)預設",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 31.240413100490457,
+        "Y": 359.39871488043735
+      },
+      {
+        "Id": "40e3835acd2b437ea0cb9d86cb894e57",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 35.004379973397249,
+        "Y": 635.675029596314
+      },
+      {
+        "Id": "2541c9fa594a4542859794e32cb26292",
+        "Name": "Watch",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 800.3674189399627,
+        "Y": 336.61890494693796
+      },
+      {
+        "Id": "d7edd05ef26c4208a4984fb106aeee81",
+        "Name": " 框選[網格]&[牆]",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 35.732477191957685,
+        "Y": -53.750284899005408
+      },
+      {
+        "Id": "11d5269ff06f47fd84e53e0fcca13e31",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 569.23883807823427,
+        "Y": 337.180145512291
+      },
+      {
+        "Id": "add617875a8e4662844a29eba5dfa101",
+        "Name": "標註與牆的間距(預設)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 28.978084994368487,
+        "Y": 488.87097722386403
+      },
+      {
+        "Id": "b2622677a0524d87820b57a3dfaedfdb",
+        "Name": " X向-牆標註位置(否↓ / 是↑)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 34.825646160732816,
+        "Y": 779.06476468703249
+      },
+      {
+        "Id": "072617e8706e4216bbc9aff23cbcd9cd",
+        "Name": " Y向-牆標註位置 (否← / 是→)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 33.286759132683642,
+        "Y": 918.15669263901464
+      }
+    ],
+    "Annotations": [],
+    "X": 196.54827255387718,
+    "Y": 240.97394586473146,
+    "Zoom": 0.48176694834112727
+  }
+}

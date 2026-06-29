@@ -1,0 +1,768 @@
+{
+  "Uuid": "c3cc3ed2-b682-4bca-bb4b-6e1638693ec0",
+  "IsCustomNode": false,
+  "Description": "✨操作說明：需輸入相關資訊",
+  "Name": "FT-標註 [網格]平面",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "d735c7f6d38741c1b1d1bb64db65bc86",
+      "Name": "偏移距離",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "-100",
+      "MaximumValue": 2000.0,
+      "MinimumValue": -1000.0,
+      "StepValue": 50.0,
+      "NumberType": "Double",
+      "Description": "產生數值",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "be1d429cc44746bea4ba18c6f34ed6a8",
+      "Name": "是：選取需標註的",
+      "Type": "selection",
+      "Type2": "hostSelection",
+      "Value": "84af3260-c6c8-4bdc-b757-787ae1695462-000caa59",
+      "Description": "從 Revit 文件中選取多個元素。",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "3ce8f092e2b547908df6cf6e1f1c1fd4",
+      "Name": "否：全標註 / 是：要選取",
+      "Type": "boolean",
+      "Type2": "boolean",
+      "Value": "false",
+      "Description": "啟用在 True 與 False 之間選取",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "95c452f7819548be9a037535eae3ec6c",
+      "Name": "對應下方線型選入[編號]",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "2",
+      "MaximumValue": 10.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "NumberType": "Double",
+      "Description": "產生數值",
+      "SelectedIndex": 0
+    }
+  ],
+  "Outputs": [
+    {
+      "Id": "03a5f6d51b43419e88206201ec3a9369",
+      "Name": "專案標註型式",
+      "Type": "unknown",
+      "InitialValue": "",
+      "Description": "執行嵌入的 Python 指令碼。"
+    }
+  ],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\nui_doc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\ndoc = ui_doc.Document\r\nactive_view = ui_doc.ActiveView\r\n\r\nrun           = IN[0]\r\ndim_type_name = IN[1] if IN[1] else \"FT-DIM(TXT_4mm)\"  # ← 新增：手動輸入標註類型名稱\r\noffset_cm     = float(IN[2]) if IN[2] is not None else 100.0\r\noffset_ft     = offset_cm / 30.48\r\nselected      = IN[3] if isinstance(IN[3], list) else [IN[3]]\r\nuse_selection = IN[4]\r\n\r\ndef get_dim_type_name(dt):\r\n    for bip in [BuiltInParameter.SYMBOL_NAME_PARAM, BuiltInParameter.ALL_MODEL_TYPE_NAME]:\r\n        try:\r\n            p = dt.get_Parameter(bip)\r\n            if p and p.AsString():\r\n                return p.AsString()\r\n        except:\r\n            continue\r\n    try:\r\n        return dt.Name\r\n    except:\r\n        return None\r\n\r\nif not run:\r\n    OUT = \"待機中\"\r\nelse:\r\n    view = active_view\r\n    if not isinstance(view, ViewPlan):\r\n        OUT = \"❌ 請切換至平面視圖再執行\"\r\n    else:\r\n        TransactionManager.Instance.EnsureInTransaction(doc)\r\n        try:\r\n            # Step 1：找標註類型\r\n            dim_type = None\r\n            for dt in FilteredElementCollector(doc).OfClass(DimensionType):\r\n                name = get_dim_type_name(dt)\r\n                if name and name == dim_type_name:\r\n                    dim_type = dt\r\n                    break\r\n            if dim_type is None:\r\n                raise Exception(\"Step1❌ 找不到標註類型「{}」\".format(dim_type_name))\r\n\r\n            # Step 2：取得軸線\r\n            if use_selection and selected and selected[0] is not None:\r\n                all_grids = [UnwrapElement(e) for e in selected if isinstance(UnwrapElement(e), Grid)]\r\n            else:\r\n                all_grids = list(FilteredElementCollector(doc, view.Id).OfClass(Grid).ToElements())\r\n\r\n            # Step 3：分類\r\n            v_grids, h_grids = [], []\r\n            for g in all_grids:\r\n                try:\r\n                    p0, p1 = g.Curve.GetEndPoint(0), g.Curve.GetEndPoint(1)\r\n                    if abs(p0.X - p1.X) < 0.1: v_grids.append(g)\r\n                    elif abs(p0.Y - p1.Y) < 0.1: h_grids.append(g)\r\n                except:\r\n                    continue\r\n\r\n            v_grids.sort(key=lambda g: g.Curve.Evaluate(0.5, True).X)\r\n            h_grids.sort(key=lambda g: g.Curve.Evaluate(0.5, True).Y)\r\n\r\n            results = [\"視圖：{} | 垂直：{} 水平：{}\".format(view.Name, len(v_grids), len(h_grids))]\r\n            target_z   = view.Origin.Z\r\n            right_dir  = view.RightDirection.Normalize()\r\n            up_dir     = view.UpDirection.Normalize()\r\n\r\n            if len(v_grids) >= 2:\r\n                ra = ReferenceArray()\r\n                for g in v_grids: ra.Append(Reference(g))\r\n                all_y    = [g.Curve.GetEndPoint(i).Y for g in v_grids for i in range(2)]\r\n                line_pt  = XYZ(v_grids[0].Curve.Evaluate(0.5, True).X, max(all_y) + offset_ft, target_z)\r\n                doc.Create.NewDimension(view, Line.CreateUnbound(line_pt, right_dir), ra, dim_type)\r\n                results.append(\"✅ 橫向：{} 條\".format(len(v_grids)))\r\n\r\n            if len(h_grids) >= 2:\r\n                ra = ReferenceArray()\r\n                for g in h_grids: ra.Append(Reference(g))\r\n                all_x    = [g.Curve.GetEndPoint(i).X for g in h_grids for i in range(2)]\r\n                line_pt  = XYZ(min(all_x) - offset_ft, h_grids[0].Curve.Evaluate(0.5, True).Y, target_z)\r\n                doc.Create.NewDimension(view, Line.CreateUnbound(line_pt, up_dir), ra, dim_type)\r\n                results.append(\"✅ 縱向：{} 條\".format(len(h_grids)))\r\n\r\n            TransactionManager.Instance.TransactionTaskDone()\r\n            OUT = \"\\n\".join(results)\r\n\r\n        except Exception as e:\r\n            TransactionManager.Instance.ForceCloseTransaction()\r\n            OUT = \"❌ 錯誤原因：\" + str(e)",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "8935d7049aa94e2dbbc3a706d5e00fc4",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "2326aae33a2d4712b8b01d9b15a79ee8",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8e88421d458a4caf928a6720ad199fe5",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bbfea062f9044b3584f0387414e40f10",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1584aec81e4e41cf90d274edaaa3e921",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3c73979085d54bd99607b53c5677231f",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a1590ff788c54e86b338009f80a5cad0",
+          "Name": "OUT",
+          "Description": "Python 指令碼的結果",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "執行嵌入的 Python 指令碼。"
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Views, DSRevitNodesUI",
+      "SelectedIndex": -1,
+      "SelectedString": "",
+      "Id": "7cd20854871b4dfea178fe0f727d93fe",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2fed7d36873b4a64a0da40598e972512",
+          "Name": "Views",
+          "Description": "選取的 Views",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "所有可在目前文件中取得的視圖。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 2000.0,
+      "MinimumValue": -1000.0,
+      "StepValue": 50.0,
+      "Id": "d735c7f6d38741c1b1d1bb64db65bc86",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2efa7615302a46198d204be7066ea41d",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": -100.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "WatchWidth": 410.0,
+      "WatchHeight": 38.0,
+      "Id": "b6e685310aad4ef1a50166aadd4a4cfc",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "5d6c96875da3447c8d5b036e3a536e8a",
+          "Name": "",
+          "Description": "要顯示其輸出的節點",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "dcb6a92d859d4d738aee3f9b41935e2f",
+          "Name": "",
+          "Description": "節點輸出",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "視覺化節點的輸出"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "5d1646b628a9470a9ab1465232557b8b",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "68646bc744d648ba90b2d9051759ceab",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": true
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementsSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "84af3260-c6c8-4bdc-b757-787ae1695462-000caa59"
+      ],
+      "Id": "be1d429cc44746bea4ba18c6f34ed6a8",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4aaa7f860cfe47a69737ad659bdb1896",
+          "Name": "Elements",
+          "Description": "選取的元素。",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "從 Revit 文件中選取多個元素。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "63bee0f1fecb43faa6ee0f2bb7f3499d",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8a38048fbaf647178d52eba9f1f612a5",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "FT-DIM(TXT_4mm)"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "3ce8f092e2b547908df6cf6e1f1c1fd4",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5b8d575bddf040f4a3392207f8e873b4",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": false
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "a2f751652adf45e9bce5a5a7f76df185",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "faef6918af484b8aa504a7303cee5108",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "敷地 \\ 開挖面 \\ 筏基面 \\ GL \\ 1F(TOC) \\ 1F(TOF)\\ B1F(TOC) \\ B1F(TOF)"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\nkeyword = IN[0] if IN[0] else \"\"  # 輸入關鍵字篩選，空字串顯示全部\r\n\r\nnames = []\r\nfor dt in FilteredElementCollector(doc).OfClass(DimensionType):\r\n    name = None\r\n    # 方法1：參數讀取\r\n    for bip in [BuiltInParameter.SYMBOL_NAME_PARAM, BuiltInParameter.ALL_MODEL_TYPE_NAME]:\r\n        try:\r\n            p = dt.get_Parameter(bip)\r\n            if p and p.AsString():\r\n                name = p.AsString()\r\n                break\r\n        except:\r\n            continue\r\n    # 方法2：直接屬性\r\n    if not name:\r\n        try:\r\n            name = dt.Name\r\n        except:\r\n            name = \"(id={})\".format(dt.Id.IntegerValue)\r\n    \r\n    if keyword.lower() in name.lower():\r\n        names.append(name)\r\n\r\nnames.sort()\r\nOUT = names",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "03a5f6d51b43419e88206201ec3a9369",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "8d2797a2d24141fe8205cc9b9d3c7a2d",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2083f054822d4168915578239510a3f1",
+          "Name": "OUT",
+          "Description": "Python 指令碼的結果",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "執行嵌入的 Python 指令碼。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "2861c0088b8d46f4b07b6e4f6b5c3821",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d5364ee94f93441d8374be0236733a02",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "FT-DIM(TXT"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "08e06e900e424752aa0ff099de70a4de",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "7e371c4dc9504e169c9fc1e16a43ed65",
+          "Name": "list",
+          "Description": "要從中擷取項目的清單。\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f84879392cc34289be110a18cfdfef8e",
+          "Name": "index",
+          "Description": "要擷取的項目索引。\n\nint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "4c23f9c699cb47fe92f69cd8d803e51f",
+          "Name": "item",
+          "Description": "清單中位於給定索引的項目。",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DSCore.List.GetItemAtIndex@var[]..[],int",
+      "Replication": "Auto",
+      "Description": "從位於指定索引的給定清單傳回項目。\n\nList.GetItemAtIndex (list: var[]..[], index: int): var[]..[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 10.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "Id": "95c452f7819548be9a037535eae3ec6c",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "90d9d0d39a0b4fb799eeaa4e35c07eea",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 2.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "WatchWidth": 200.0,
+      "WatchHeight": 200.0,
+      "Id": "0acad7f804b54681847f3468f19b0300",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "51121b50afbb4063a2bf2dfffaa58792",
+          "Name": "",
+          "Description": "要顯示其輸出的節點",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f6a3cffa6e644e589c92f5495ce965dc",
+          "Name": "",
+          "Description": "節點輸出",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "視覺化節點的輸出"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "a1590ff788c54e86b338009f80a5cad0",
+      "End": "5d6c96875da3447c8d5b036e3a536e8a",
+      "Id": "d5edf2960db34ef8976d03c61dde30b7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2efa7615302a46198d204be7066ea41d",
+      "End": "bbfea062f9044b3584f0387414e40f10",
+      "Id": "1a6336db24f941b9a30548a278d7b069",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "68646bc744d648ba90b2d9051759ceab",
+      "End": "2326aae33a2d4712b8b01d9b15a79ee8",
+      "Id": "9edce08f46e648f990819ae5ab645b68",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4aaa7f860cfe47a69737ad659bdb1896",
+      "End": "1584aec81e4e41cf90d274edaaa3e921",
+      "Id": "6ec808dc1c7a4166bae76a14467097da",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5b8d575bddf040f4a3392207f8e873b4",
+      "End": "3c73979085d54bd99607b53c5677231f",
+      "Id": "e6c069cb987d460fa6261a1b1e5b5021",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2083f054822d4168915578239510a3f1",
+      "End": "7e371c4dc9504e169c9fc1e16a43ed65",
+      "Id": "8a6eb9ca62174f63a7815b1213154e75",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2083f054822d4168915578239510a3f1",
+      "End": "51121b50afbb4063a2bf2dfffaa58792",
+      "Id": "053d9f79d1b34916a92837835945eeaf",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d5364ee94f93441d8374be0236733a02",
+      "End": "8d2797a2d24141fe8205cc9b9d3c7a2d",
+      "Id": "3b6f36db8b3c42a5825e80dffe2c51c2",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4c23f9c699cb47fe92f69cd8d803e51f",
+      "End": "8e88421d458a4caf928a6720ad199fe5",
+      "Id": "b53ebfeb22584b3bb86c6fdb442b257f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "90d9d0d39a0b4fb799eeaa4e35c07eea",
+      "End": "f84879392cc34289be110a18cfdfef8e",
+      "Id": "396f7cd1cb7e4a038346996da1eee711",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "性質",
+      "Version": "2.19",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.1",
+      "Data": {}
+    }
+  ],
+  "Author": "CHIUNG YING",
+  "Linting": {
+    "activeLinter": "無",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.19.3.6394",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "背景預覽(_B)",
+      "EyeX": -14.198587417602539,
+      "EyeY": 28.090059280395508,
+      "EyeZ": 49.662837982177734,
+      "LookX": 12.000000953674316,
+      "LookY": -13.000001907348633,
+      "LookZ": -58.000003814697266,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "8935d7049aa94e2dbbc3a706d5e00fc4",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1286.78248066704,
+        "Y": 935.775177175152
+      },
+      {
+        "Id": "7cd20854871b4dfea178fe0f727d93fe",
+        "Name": "樓層選取",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 576.34749701009116,
+        "Y": 340.08460167661457
+      },
+      {
+        "Id": "d735c7f6d38741c1b1d1bb64db65bc86",
+        "Name": "偏移距離",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 710.821002513958,
+        "Y": 1052.85106577126
+      },
+      {
+        "Id": "b6e685310aad4ef1a50166aadd4a4cfc",
+        "Name": "Watch",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1515.609077569716,
+        "Y": 935.29533170131094
+      },
+      {
+        "Id": "5d1646b628a9470a9ab1465232557b8b",
+        "Name": "Boolean",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 872.30454991943407,
+        "Y": 526.79719691026162
+      },
+      {
+        "Id": "be1d429cc44746bea4ba18c6f34ed6a8",
+        "Name": "是：選取需標註的",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 724.30741430504861,
+        "Y": 1204.77507070991
+      },
+      {
+        "Id": "63bee0f1fecb43faa6ee0f2bb7f3499d",
+        "Name": "【網格】預設標註型式",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 325.93060071186073,
+        "Y": 340.29155155324383
+      },
+      {
+        "Id": "3ce8f092e2b547908df6cf6e1f1c1fd4",
+        "Name": "否：全標註 / 是：要選取",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 731.21696985477774,
+        "Y": 1367.6313727237075
+      },
+      {
+        "Id": "a2f751652adf45e9bce5a5a7f76df185",
+        "Name": "標註樓層(複製文字用)",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 831.87453186517018,
+        "Y": 295.16977690533935
+      },
+      {
+        "Id": "03a5f6d51b43419e88206201ec3a9369",
+        "Name": "專案標註型式",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": true,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 480.6823070525673,
+        "Y": 762.35540262702955
+      },
+      {
+        "Id": "2861c0088b8d46f4b07b6e4f6b5c3821",
+        "Name": "String",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 285.80098539245193,
+        "Y": 763.46965799528823
+      },
+      {
+        "Id": "08e06e900e424752aa0ff099de70a4de",
+        "Name": "List.GetItemAtIndex",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 852.60891302864684,
+        "Y": 841.2675315111145
+      },
+      {
+        "Id": "95c452f7819548be9a037535eae3ec6c",
+        "Name": "對應下方線型選入[編號]",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 367.69727038855069,
+        "Y": 925.47696022532421
+      },
+      {
+        "Id": "0acad7f804b54681847f3468f19b0300",
+        "Name": "Watch",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 800.24131084372914,
+        "Y": 711.49273672043944
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "016c130df9014cedbb4d3b39551879e1",
+        "Title": "網格標註型式(預設)",
+        "DescriptionText": "描述 <按兩下這裡以編輯群組描述>",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "08e06e900e424752aa0ff099de70a4de",
+          "95c452f7819548be9a037535eae3ec6c",
+          "03a5f6d51b43419e88206201ec3a9369",
+          "2861c0088b8d46f4b07b6e4f6b5c3821",
+          "0acad7f804b54681847f3468f19b0300"
+        ],
+        "HasNestedGroups": false,
+        "Left": 275.80098539245193,
+        "Top": 638.49273672043944,
+        "Width": 811.44032545127709,
+        "Height": 418.98422350488465,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 711.49273672043944,
+        "InitialHeight": 313.53077995281672,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "0fd55905e1184a0780390cafbc0505b6",
+        "Title": "備用",
+        "DescriptionText": "描述 <按兩下這裡以編輯群組描述>",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "7cd20854871b4dfea178fe0f727d93fe",
+          "63bee0f1fecb43faa6ee0f2bb7f3499d",
+          "a2f751652adf45e9bce5a5a7f76df185"
+        ],
+        "HasNestedGroups": false,
+        "Left": 315.93060071186073,
+        "Top": 222.16977690533935,
+        "Width": 759.94393115330945,
+        "Height": 250.12177464790449,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 295.16977690533935,
+        "InitialHeight": 190.12177464790449,
+        "TextblockHeight": 63.0,
+        "Background": "#FFB5B5B5"
+      }
+    ],
+    "X": -122.23462145473258,
+    "Y": -349.00327733597453,
+    "Zoom": 0.61653361385235061
+  }
+}

@@ -1,0 +1,813 @@
+{
+  "Uuid": "c3cc3ed2-b682-4bca-bb4b-6e1638693ec0",
+  "IsCustomNode": false,
+  "Description": "✨操作說明：需輸入相關資訊",
+  "Name": "FT-標註 [網格]-平立",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "be1d429cc44746bea4ba18c6f34ed6a8",
+      "Name": " 否：任選一個 / 是：選取需標註",
+      "Type": "selection",
+      "Type2": "hostSelection",
+      "Value": "84af3260-c6c8-4bdc-b757-787ae1695462-000caa59",
+      "Description": "從 Revit 文件中選取多個元素。",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "95c452f7819548be9a037535eae3ec6c",
+      "Name": "對應下方線型選入[編號]",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "2",
+      "MaximumValue": 10.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "NumberType": "Double",
+      "Description": "產生數值",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "7ef641be00d74c5f8ca160d63252c9f6",
+      "Name": "立面標註篩選",
+      "Type": "string",
+      "Type2": "string",
+      "Value": "TOC,開挖,筏基,GL,屋突",
+      "Description": "建立一個字串。",
+      "SelectedIndex": 0
+    }
+  ],
+  "Outputs": [
+    {
+      "Id": "03a5f6d51b43419e88206201ec3a9369",
+      "Name": "專案標註型式",
+      "Type": "unknown",
+      "InitialValue": "",
+      "Description": "執行嵌入的 Python 指令碼。"
+    }
+  ],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\nui_doc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\ndoc    = ui_doc.Document\r\nactive_view = ui_doc.ActiveView\r\n\r\nrun           = IN[0]\r\ndim_type_name = IN[1] if IN[1] else \"FT-DIM(TXT_4mm)\"\r\noffset_cm     = float(IN[2]) if IN[2] is not None else 50.0\r\noffset_ft     = abs(offset_cm) / 30.48      # 標頭外加距離\r\nselected      = IN[3] if isinstance(IN[3], list) else [IN[3]]\r\nuse_selection = IN[4]\r\n\r\nraw_kw      = str(IN[5]).strip() if len(IN) > 5 and IN[5] else \"\"\r\nlv_keywords = [k.strip() for k in raw_kw.split(\",\") if k.strip()] if raw_kw else []\r\n\r\nHEAD_OFFSET_FT = 50.0 / 304.8   # 立面標頭下方 50mm\r\n\r\n# ── 工具函式 ─────────────────────────────────────────────────────────────────\r\n\r\ndef get_dim_type_name(dt):\r\n    for bip in [BuiltInParameter.SYMBOL_NAME_PARAM, BuiltInParameter.ALL_MODEL_TYPE_NAME]:\r\n        try:\r\n            p = dt.get_Parameter(bip)\r\n            if p and p.AsString(): return p.AsString()\r\n        except: continue\r\n    try: return dt.Name\r\n    except: return None\r\n\r\ndef get_crop_z_range(v):\r\n    try:\r\n        cb = v.CropBox; t = cb.Transform; mn, mx = cb.Min, cb.Max\r\n        zv = [t.OfPoint(XYZ(xi, yi, 0)).Z\r\n              for xi in [mn.X, mx.X]\r\n              for yi in [mn.Y, mx.Y]]\r\n        return min(zv), max(zv)\r\n    except:\r\n        return None, None\r\n\r\ndef get_grid_head_z(grids, v):\r\n    for etype in [DatumExtentType.ViewSpecific, DatumExtentType.Model]:\r\n        try:\r\n            tops = []\r\n            for g in grids:\r\n                clist = list(g.GetCurvesInView(etype, v))\r\n                if clist:\r\n                    c = clist[0]\r\n                    z0, z1 = c.GetEndPoint(0).Z, c.GetEndPoint(1).Z\r\n                    if abs(z0 - z1) > 0.05:\r\n                        tops.append(max(z0, z1))\r\n            if tops: return max(tops)\r\n        except: continue\r\n    if v.CropBoxActive:\r\n        _, z_max = get_crop_z_range(v)\r\n        if z_max is not None: return z_max\r\n    raise Exception(\"無法取得標頭高度，請確認裁剪框已啟用\")\r\n\r\ndef get_levels_in_view(all_levels, v, z_min, z_max):\r\n    TOL = 2.0\r\n    result = []\r\n    for lv in all_levels:\r\n        in_view = False\r\n        try:\r\n            vs = list(lv.GetCurvesInView(DatumExtentType.ViewSpecific, v))\r\n            if vs: in_view = True\r\n        except: pass\r\n        if not in_view:\r\n            if z_min is not None:\r\n                in_view = (z_min - TOL <= lv.Elevation <= z_max + TOL)\r\n            else:\r\n                in_view = True\r\n        if in_view:\r\n            result.append(lv)\r\n    return result\r\n\r\ndef get_level_left_endpoint(levels, v, right_dir):\r\n    min_proj = None\r\n    best_pt  = None\r\n    for lv in levels:\r\n        for etype in [DatumExtentType.ViewSpecific, DatumExtentType.Model]:\r\n            try:\r\n                clist = list(lv.GetCurvesInView(etype, v))\r\n                if not clist: continue\r\n                c = clist[0]\r\n                for i in range(2):\r\n                    ep   = c.GetEndPoint(i)\r\n                    proj = ep.DotProduct(right_dir)\r\n                    if min_proj is None or proj < min_proj:\r\n                        min_proj = proj; best_pt = ep\r\n                break\r\n            except: continue\r\n    return best_pt\r\n\r\ndef collect_grids(use_sel, selected, doc, v):\r\n    \"\"\"收集格線並過濾掉非 Grid 元素（FamilyInstance 等）。\"\"\"\r\n    if use_sel:\r\n        raw = [UnwrapElement(x) for x in selected if x is not None]\r\n        return [g for g in raw if g is not None and g.GetType().Name == \"Grid\"]\r\n    else:\r\n        return list(FilteredElementCollector(doc, v.Id).OfClass(Grid).ToElements())\r\n\r\ndef get_grid_extents_in_view(grids, v, right_v, fwd_v):\r\n    \"\"\"\r\n    取得所有格線在視圖中實際繪製線段的端點範圍。\r\n    回傳 (min_right, max_right, min_fwd, max_fwd)。\r\n    \"\"\"\r\n    min_r = max_r = min_f = max_f = None\r\n    for g in grids:\r\n        curve = None\r\n        for etype in [DatumExtentType.ViewSpecific, DatumExtentType.Model]:\r\n            try:\r\n                clist = list(g.GetCurvesInView(etype, v))\r\n                if clist: curve = clist[0]; break\r\n            except: continue\r\n        if curve is None:\r\n            try: curve = g.Curve\r\n            except: continue\r\n        for i in range(2):\r\n            try:\r\n                ep = curve.GetEndPoint(i)\r\n                r  = ep.DotProduct(right_v)\r\n                f  = ep.DotProduct(fwd_v)\r\n                if min_r is None or r < min_r: min_r = r\r\n                if max_r is None or r > max_r: max_r = r\r\n                if min_f is None or f < min_f: min_f = f\r\n                if max_f is None or f > max_f: max_f = f\r\n            except: pass\r\n    return min_r, max_r, min_f, max_f\r\n\r\ndef make_plan_anchor(r, f, right_v, fwd_v):\r\n    \"\"\"將 right_v / fwd_v 分量轉回世界座標 XYZ（平面視圖）。\"\"\"\r\n    return XYZ(r * right_v.X + f * fwd_v.X,\r\n               r * right_v.Y + f * fwd_v.Y, 0)\r\n\r\n# ── 主程式 ───────────────────────────────────────────────────────────────────\r\n\r\nif not run:\r\n    OUT = \"請將 IN[0] 設為 True 以執行\"\r\nelse:\r\n    try:\r\n        all_dim_types = FilteredElementCollector(doc).OfClass(DimensionType).ToElements()\r\n        dim_type = None\r\n        for dt in all_dim_types:\r\n            if get_dim_type_name(dt) == dim_type_name:\r\n                dim_type = dt; break\r\n        if dim_type is None:\r\n            OUT = \"找不到標註類型：\" + dim_type_name\r\n        else:\r\n            v          = active_view\r\n            view_class = v.GetType().Name\r\n            res        = []\r\n\r\n            # ──────────────────────────────────────────────────────────────\r\n            # 平面圖\r\n            # ──────────────────────────────────────────────────────────────\r\n            if view_class == \"ViewPlan\":\r\n                right_v = v.RightDirection\r\n                fwd_v   = XYZ(-right_v.Y, right_v.X, 0)   # 視圖上方向（在平面內）\r\n\r\n                grids = collect_grids(use_selection, selected, doc, v)\r\n                res.append(\"取得格線：{} 條（{}）\".format(\r\n                    len(grids), \"選取\" if use_selection else \"全視圖\"))\r\n\r\n                if len(grids) < 2:\r\n                    OUT = res + [\"平面可見軸線不足 2 條，請確認選取了格線（非柱/梁）\"]\r\n                else:\r\n                    def is_horiz(g):\r\n                        try:\r\n                            c = g.Curve\r\n                            d = (c.GetEndPoint(1) - c.GetEndPoint(0)).Normalize()\r\n                            return abs(d.DotProduct(right_v)) >= abs(d.DotProduct(fwd_v))\r\n                        except: return False\r\n\r\n                    h_grids = sorted([g for g in grids if     is_horiz(g)],\r\n                                     key=lambda g: g.Curve.GetEndPoint(0).DotProduct(fwd_v))\r\n                    v_grids = sorted([g for g in grids if not is_horiz(g)],\r\n                                     key=lambda g: g.Curve.GetEndPoint(0).DotProduct(right_v))\r\n\r\n                    TransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n                    # ── H 軸標註（水平格線，量上下間距）────────────────────\r\n                    if len(h_grids) >= 2:\r\n                        refs = ReferenceArray()\r\n                        for g in h_grids: refs.Append(Reference(g))\r\n\r\n                        # 取 H 格線在視圖中的實際端部範圍\r\n                        h_min_r, h_max_r, h_min_f, h_max_f = \\\r\n                            get_grid_extents_in_view(h_grids, v, right_v, fwd_v)\r\n\r\n                        if h_min_r is not None:\r\n                            # 標註線：在最上方格線的頂端（標頭位置）+ offset，水平方向\r\n                            # X 定位在格線最左端（標頭端），Y 定位在最上方端部 + offset\r\n                            anchor = make_plan_anchor(h_min_r, h_max_f + offset_ft, right_v, fwd_v)\r\n                        else:\r\n                            pt     = h_grids[-1].Curve.Evaluate(0.5, True)\r\n                            anchor = XYZ(pt.X + fwd_v.X * offset_ft,\r\n                                         pt.Y + fwd_v.Y * offset_ft, 0)\r\n\r\n                        line = Line.CreateUnbound(anchor, right_v)\r\n                        doc.Create.NewDimension(v, line, refs, dim_type)\r\n                        res.append(\"平面 H軸標註：{} 條\".format(len(h_grids)))\r\n                    else:\r\n                        res.append(\"H軸格線 < 2 條，跳過\")\r\n\r\n                    # ── V 軸標註（垂直格線，量左右間距）────────────────────\r\n                    if len(v_grids) >= 2:\r\n                        refs = ReferenceArray()\r\n                        for g in v_grids: refs.Append(Reference(g))\r\n\r\n                        # 取 V 格線在視圖中的實際端部範圍\r\n                        v_min_r, v_max_r, v_min_f, v_max_f = \\\r\n                            get_grid_extents_in_view(v_grids, v, right_v, fwd_v)\r\n\r\n                        if v_min_r is not None:\r\n                            # 標註線：在最左格線的左側（標頭位置）- offset，垂直方向\r\n                            # X 定位在最左側端部 - offset，Y 定位在最高端部（標頭位置）\r\n                            anchor = make_plan_anchor(v_min_r - offset_ft, v_max_f, right_v, fwd_v)\r\n                        else:\r\n                            pt     = v_grids[0].Curve.Evaluate(0.5, True)\r\n                            anchor = XYZ(pt.X - right_v.X * offset_ft,\r\n                                         pt.Y - right_v.Y * offset_ft, 0)\r\n\r\n                        line = Line.CreateUnbound(anchor, fwd_v)\r\n                        doc.Create.NewDimension(v, line, refs, dim_type)\r\n                        res.append(\"平面 V軸標註：{} 條\".format(len(v_grids)))\r\n                    else:\r\n                        res.append(\"V軸格線 < 2 條，跳過\")\r\n\r\n                    TransactionManager.Instance.TransactionTaskDone()\r\n                    OUT = res\r\n\r\n            # ──────────────────────────────────────────────────────────────\r\n            # 立面 / 剖面\r\n            # ──────────────────────────────────────────────────────────────\r\n            elif view_class == \"ViewSection\":\r\n                right_dir = v.RightDirection\r\n                up_dir    = v.UpDirection\r\n\r\n                raw_grids = collect_grids(use_selection, selected, doc, v)\r\n\r\n                def is_visible_vertical(g):\r\n                    try:\r\n                        c  = g.Curve\r\n                        p0, p1 = c.GetEndPoint(0), c.GetEndPoint(1)\r\n                        return abs(p0.DotProduct(right_dir) - p1.DotProduct(right_dir)) < 0.1\r\n                    except: return False\r\n\r\n                elev_grids = [g for g in raw_grids if is_visible_vertical(g)]\r\n                if len(elev_grids) < 2 and use_selection:\r\n                    view_grids = list(FilteredElementCollector(doc, v.Id).OfClass(Grid).ToElements())\r\n                    elev_grids = [g for g in view_grids if is_visible_vertical(g)]\r\n\r\n                if len(elev_grids) < 2:\r\n                    OUT = \"立面可見軸線不足 2 條（找到 {} 條），ViewDir={}\".format(\r\n                        len(elev_grids), v.ViewDirection)\r\n                else:\r\n                    elev_grids.sort(key=lambda g: g.Curve.GetEndPoint(0).DotProduct(right_dir))\r\n\r\n                    head_z    = get_grid_head_z(elev_grids, v)\r\n                    head_z_mm = head_z * 304.8\r\n                    dim_z     = head_z - HEAD_OFFSET_FT\r\n\r\n                    if head_z_mm > 8000:\r\n                        res.append(\"警告：標頭高度={:.0f}mm\".format(head_z_mm))\r\n\r\n                    h_refs = ReferenceArray()\r\n                    for g in elev_grids: h_refs.Append(Reference(g))\r\n                    anchor = elev_grids[0].Curve.GetEndPoint(0)\r\n                    h_line = Line.CreateUnbound(XYZ(anchor.X, anchor.Y, dim_z), right_dir)\r\n\r\n                    all_levels = list(FilteredElementCollector(doc).OfClass(Level).ToElements())\r\n                    z_min, z_max = get_crop_z_range(v)\r\n                    if z_min is not None:\r\n                        res.append(\"裁剪框：{:.0f}mm ~ {:.0f}mm\".format(\r\n                            z_min * 304.8, z_max * 304.8))\r\n\r\n                    lv_vis = get_levels_in_view(all_levels, v, z_min, z_max)\r\n                    if lv_keywords:\r\n                        lv_vis = [l for l in lv_vis\r\n                                  if any(kw in l.Name for kw in lv_keywords)]\r\n                    lv_vis.sort(key=lambda l: l.Elevation)\r\n\r\n                    TransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n                    doc.Create.NewDimension(v, h_line, h_refs, dim_type)\r\n                    res.append(\"立面水平標註：{} 條軸線\".format(len(elev_grids)))\r\n\r\n                    if len(lv_vis) >= 2:\r\n                        v_refs = ReferenceArray()\r\n                        for lv in lv_vis:\r\n                            try: v_refs.Append(Reference(lv))\r\n                            except: pass\r\n\r\n                        if v_refs.Size >= 2:\r\n                            left_ep = get_level_left_endpoint(lv_vis, v, right_dir)\r\n                            mid_z   = (lv_vis[0].Elevation + lv_vis[-1].Elevation) / 2.0\r\n                            if left_ep is not None:\r\n                                v_base = XYZ(left_ep.X, left_ep.Y, mid_z)\r\n                                res.append(\"垂直標註線：樓層線端部（自動）\")\r\n                            else:\r\n                                g0     = elev_grids[0].Curve.GetEndPoint(0)\r\n                                v_base = XYZ(g0.X - right_dir.X * offset_ft,\r\n                                             g0.Y - right_dir.Y * offset_ft, mid_z)\r\n                                res.append(\"垂直標註線：IN[2] 備用\")\r\n\r\n                            v_line = Line.CreateUnbound(v_base, up_dir)\r\n                            doc.Create.NewDimension(v, v_line, v_refs, dim_type)\r\n                            res.append(\"立面垂直標註：{} 個樓層（{}～{}）\".format(\r\n                                len(lv_vis), lv_vis[0].Name, lv_vis[-1].Name))\r\n                            if lv_keywords:\r\n                                res.append(\"關鍵字：{}\".format(\"、\".join(lv_keywords)))\r\n                        else:\r\n                            res.append(\"樓層參考建立失敗\")\r\n                    else:\r\n                        res.append(\"可見樓層不足 2 個（找到 {} 個）\".format(len(lv_vis)))\r\n\r\n                    TransactionManager.Instance.TransactionTaskDone()\r\n                    res.append(\"標頭高度：{:.0f}mm\".format(head_z_mm))\r\n                    OUT = res\r\n\r\n            else:\r\n                OUT = \"不支援的視圖類別：{}\".format(view_class)\r\n\r\n    except Exception as e:\r\n        import traceback\r\n        try: TransactionManager.Instance.ForceCloseTransaction()\r\n        except: pass\r\n        OUT = \"錯誤：\" + str(e) + \"\\n\" + traceback.format_exc()",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "8935d7049aa94e2dbbc3a706d5e00fc4",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "2326aae33a2d4712b8b01d9b15a79ee8",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8e88421d458a4caf928a6720ad199fe5",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bbfea062f9044b3584f0387414e40f10",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1584aec81e4e41cf90d274edaaa3e921",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3c73979085d54bd99607b53c5677231f",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5d6cd2dcedbc4fa68d0a51bbb859997d",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a1590ff788c54e86b338009f80a5cad0",
+          "Name": "OUT",
+          "Description": "Python 指令碼的結果",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "執行嵌入的 Python 指令碼。"
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Views, DSRevitNodesUI",
+      "SelectedIndex": -1,
+      "SelectedString": "",
+      "Id": "7cd20854871b4dfea178fe0f727d93fe",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2fed7d36873b4a64a0da40598e972512",
+          "Name": "Views",
+          "Description": "選取的 Views",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "所有可在目前文件中取得的視圖。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 2000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 50.0,
+      "Id": "d735c7f6d38741c1b1d1bb64db65bc86",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2efa7615302a46198d204be7066ea41d",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 0.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "WatchWidth": 200.0,
+      "WatchHeight": 38.0,
+      "Id": "b6e685310aad4ef1a50166aadd4a4cfc",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "5d6c96875da3447c8d5b036e3a536e8a",
+          "Name": "",
+          "Description": "要顯示其輸出的節點",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "dcb6a92d859d4d738aee3f9b41935e2f",
+          "Name": "",
+          "Description": "節點輸出",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "視覺化節點的輸出"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "5d1646b628a9470a9ab1465232557b8b",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "68646bc744d648ba90b2d9051759ceab",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": true
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementsSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "84af3260-c6c8-4bdc-b757-787ae1695462-000caa59"
+      ],
+      "Id": "be1d429cc44746bea4ba18c6f34ed6a8",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4aaa7f860cfe47a69737ad659bdb1896",
+          "Name": "Elements",
+          "Description": "選取的元素。",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "從 Revit 文件中選取多個元素。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "63bee0f1fecb43faa6ee0f2bb7f3499d",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8a38048fbaf647178d52eba9f1f612a5",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "FT-DIM(TXT_4mm)"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "3ce8f092e2b547908df6cf6e1f1c1fd4",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5b8d575bddf040f4a3392207f8e873b4",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": true
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "a2f751652adf45e9bce5a5a7f76df185",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "faef6918af484b8aa504a7303cee5108",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "敷地 \\ 開挖面 \\ 筏基面 \\ GL \\ 1F(TOC) \\ 1F(TOF)\\ B1F(TOC) \\ B1F(TOF)"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\nkeyword = IN[0] if IN[0] else \"\"  # 輸入關鍵字篩選，空字串顯示全部\r\n\r\nnames = []\r\nfor dt in FilteredElementCollector(doc).OfClass(DimensionType):\r\n    name = None\r\n    # 方法1：參數讀取\r\n    for bip in [BuiltInParameter.SYMBOL_NAME_PARAM, BuiltInParameter.ALL_MODEL_TYPE_NAME]:\r\n        try:\r\n            p = dt.get_Parameter(bip)\r\n            if p and p.AsString():\r\n                name = p.AsString()\r\n                break\r\n        except:\r\n            continue\r\n    # 方法2：直接屬性\r\n    if not name:\r\n        try:\r\n            name = dt.Name\r\n        except:\r\n            name = \"(id={})\".format(dt.Id.IntegerValue)\r\n    \r\n    if keyword.lower() in name.lower():\r\n        names.append(name)\r\n\r\nnames.sort()\r\nOUT = names",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "03a5f6d51b43419e88206201ec3a9369",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "8d2797a2d24141fe8205cc9b9d3c7a2d",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2083f054822d4168915578239510a3f1",
+          "Name": "OUT",
+          "Description": "Python 指令碼的結果",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "執行嵌入的 Python 指令碼。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "2861c0088b8d46f4b07b6e4f6b5c3821",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d5364ee94f93441d8374be0236733a02",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "FT-DIM(TXT"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "08e06e900e424752aa0ff099de70a4de",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "7e371c4dc9504e169c9fc1e16a43ed65",
+          "Name": "list",
+          "Description": "要從中擷取項目的清單。\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f84879392cc34289be110a18cfdfef8e",
+          "Name": "index",
+          "Description": "要擷取的項目索引。\n\nint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "4c23f9c699cb47fe92f69cd8d803e51f",
+          "Name": "item",
+          "Description": "清單中位於給定索引的項目。",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DSCore.List.GetItemAtIndex@var[]..[],int",
+      "Replication": "Auto",
+      "Description": "從位於指定索引的給定清單傳回項目。\n\nList.GetItemAtIndex (list: var[]..[], index: int): var[]..[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 10.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "Id": "95c452f7819548be9a037535eae3ec6c",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "90d9d0d39a0b4fb799eeaa4e35c07eea",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 2.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "7ef641be00d74c5f8ca160d63252c9f6",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "554bd16eb08645a8be900366aa8820a9",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "TOC,開挖,筏基,GL,屋突"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "57dbde1c095a421f817333fe12124647",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8bd0ccbfee6043b08936cd102e161faf",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "TOF"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "3a0a1bd5a4eb403487ccf57f7e015177",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "82b65b5cfc164e90a03560a20c3dbb54",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "FT-DIM(TXT_6mm)"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "a1590ff788c54e86b338009f80a5cad0",
+      "End": "5d6c96875da3447c8d5b036e3a536e8a",
+      "Id": "d5edf2960db34ef8976d03c61dde30b7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2efa7615302a46198d204be7066ea41d",
+      "End": "bbfea062f9044b3584f0387414e40f10",
+      "Id": "1a6336db24f941b9a30548a278d7b069",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "68646bc744d648ba90b2d9051759ceab",
+      "End": "2326aae33a2d4712b8b01d9b15a79ee8",
+      "Id": "9edce08f46e648f990819ae5ab645b68",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4aaa7f860cfe47a69737ad659bdb1896",
+      "End": "1584aec81e4e41cf90d274edaaa3e921",
+      "Id": "6ec808dc1c7a4166bae76a14467097da",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5b8d575bddf040f4a3392207f8e873b4",
+      "End": "3c73979085d54bd99607b53c5677231f",
+      "Id": "e6c069cb987d460fa6261a1b1e5b5021",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2083f054822d4168915578239510a3f1",
+      "End": "7e371c4dc9504e169c9fc1e16a43ed65",
+      "Id": "8a6eb9ca62174f63a7815b1213154e75",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d5364ee94f93441d8374be0236733a02",
+      "End": "8d2797a2d24141fe8205cc9b9d3c7a2d",
+      "Id": "3b6f36db8b3c42a5825e80dffe2c51c2",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4c23f9c699cb47fe92f69cd8d803e51f",
+      "End": "8e88421d458a4caf928a6720ad199fe5",
+      "Id": "4d8083686b554babaa8a8e0e8350b27e",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "90d9d0d39a0b4fb799eeaa4e35c07eea",
+      "End": "f84879392cc34289be110a18cfdfef8e",
+      "Id": "396f7cd1cb7e4a038346996da1eee711",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "554bd16eb08645a8be900366aa8820a9",
+      "End": "5d6cd2dcedbc4fa68d0a51bbb859997d",
+      "Id": "67adfa038381402aaecab5bd2730cefd",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "性質",
+      "Version": "2.19",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.1",
+      "Data": {}
+    }
+  ],
+  "Author": "CHIUNG YING",
+  "Linting": {
+    "activeLinter": "無",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.19.3.6394",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "背景預覽(_B)",
+      "EyeX": -14.198587417602539,
+      "EyeY": 28.090059280395508,
+      "EyeZ": 49.662837982177734,
+      "LookX": 12.000000953674316,
+      "LookY": -13.000001907348633,
+      "LookZ": -58.000003814697266,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "8935d7049aa94e2dbbc3a706d5e00fc4",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1284.04103908027,
+        "Y": 1031.72563271205
+      },
+      {
+        "Id": "7cd20854871b4dfea178fe0f727d93fe",
+        "Name": "樓層選取",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 576.34749701009116,
+        "Y": 340.08460167661457
+      },
+      {
+        "Id": "d735c7f6d38741c1b1d1bb64db65bc86",
+        "Name": "偏移距離",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 720.429815724716,
+        "Y": 1043.61261249107
+      },
+      {
+        "Id": "b6e685310aad4ef1a50166aadd4a4cfc",
+        "Name": "Watch",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1501.9018696358728,
+        "Y": 1031.2457872382122
+      },
+      {
+        "Id": "5d1646b628a9470a9ab1465232557b8b",
+        "Name": "Boolean",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 872.30454991943407,
+        "Y": 526.79719691026162
+      },
+      {
+        "Id": "be1d429cc44746bea4ba18c6f34ed6a8",
+        "Name": " 否：任選一個 / 是：選取需標註",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 723.94545186136759,
+        "Y": 1196.1744759147043
+      },
+      {
+        "Id": "63bee0f1fecb43faa6ee0f2bb7f3499d",
+        "Name": "【網格】預設標註型式",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 325.93060071186073,
+        "Y": 340.29155155324383
+      },
+      {
+        "Id": "3ce8f092e2b547908df6cf6e1f1c1fd4",
+        "Name": "否：全標註 / 是：要選取",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 723.26991110861229,
+        "Y": 1369.9124983043323
+      },
+      {
+        "Id": "a2f751652adf45e9bce5a5a7f76df185",
+        "Name": "標註樓層(複製文字用)",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 831.87453186517018,
+        "Y": 295.16977690533935
+      },
+      {
+        "Id": "03a5f6d51b43419e88206201ec3a9369",
+        "Name": "專案標註型式",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": true,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 461.37139151497348,
+        "Y": 730.66896923602008
+      },
+      {
+        "Id": "2861c0088b8d46f4b07b6e4f6b5c3821",
+        "Name": "String",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 264.99778402884203,
+        "Y": 731.78322460427876
+      },
+      {
+        "Id": "08e06e900e424752aa0ff099de70a4de",
+        "Name": "List.GetItemAtIndex",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 833.562406482508,
+        "Y": 730.52983133391092
+      },
+      {
+        "Id": "95c452f7819548be9a037535eae3ec6c",
+        "Name": "對應下方線型選入[編號]",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 353.40802007069351,
+        "Y": 884.924670520526
+      },
+      {
+        "Id": "7ef641be00d74c5f8ca160d63252c9f6",
+        "Name": "立面標註篩選",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 727.33679401609311,
+        "Y": 1512.1518082924201
+      },
+      {
+        "Id": "57dbde1c095a421f817333fe12124647",
+        "Name": "立面篩選備用文字",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 490.82366462777338,
+        "Y": 1505.0999789436046
+      },
+      {
+        "Id": "3a0a1bd5a4eb403487ccf57f7e015177",
+        "Name": "String",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 834.84461367336746,
+        "Y": 896.76457411896126
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "0fd55905e1184a0780390cafbc0505b6",
+        "Title": "備用",
+        "DescriptionText": "描述 <按兩下這裡以編輯群組描述>",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "7cd20854871b4dfea178fe0f727d93fe",
+          "63bee0f1fecb43faa6ee0f2bb7f3499d",
+          "a2f751652adf45e9bce5a5a7f76df185"
+        ],
+        "HasNestedGroups": false,
+        "Left": 315.93060071186073,
+        "Top": 222.16977690533935,
+        "Width": 759.94393115330945,
+        "Height": 250.12177464790449,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 295.16977690533935,
+        "InitialHeight": 190.12177464790449,
+        "TextblockHeight": 63.0,
+        "Background": "#FFB5B5B5"
+      },
+      {
+        "Id": "016c130df9014cedbb4d3b39551879e1",
+        "Title": "網格標註型式(預設)",
+        "DescriptionText": "描述 <按兩下這裡以編輯群組描述>",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "08e06e900e424752aa0ff099de70a4de",
+          "95c452f7819548be9a037535eae3ec6c",
+          "03a5f6d51b43419e88206201ec3a9369",
+          "2861c0088b8d46f4b07b6e4f6b5c3821",
+          "3a0a1bd5a4eb403487ccf57f7e015177"
+        ],
+        "HasNestedGroups": false,
+        "Left": 254.99778402884203,
+        "Top": 657.52983133391092,
+        "Width": 811.56462245366583,
+        "Height": 371.23474278505034,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 730.52983133391092,
+        "InitialHeight": 311.23474278505034,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": -255.4849286194717,
+    "Y": -607.16989631108777,
+    "Zoom": 0.88353347695155793
+  }
+}

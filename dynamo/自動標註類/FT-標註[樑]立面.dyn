@@ -1,0 +1,581 @@
+{
+  "Uuid": "231e883f-0ede-484a-af15-56767d44af0b",
+  "IsCustomNode": false,
+  "Description": "✨操作說明：需輸入相關資訊",
+  "Name": "FT-標註[樑]立面",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "e532ddefb8d041aaa1da74800ba5f4c1",
+      "Name": "標註間距_外層 (總寬)",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "700",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 50.0,
+      "NumberType": "Double",
+      "Description": "產生數值",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "9b3a98c2baa94ebe86a4bb71f534300d",
+      "Name": "  框選[網格]&[樑]",
+      "Type": "selection",
+      "Type2": "hostSelection",
+      "Value": "5013e85c-1f63-4069-8884-8367e2baead3-0006f00e,5013e85c-1f63-4069-8884-8367e2baead3-0006f05b,5013e85c-1f63-4069-8884-8367e2baead3-0006f123,c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6bdd,c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6c78,05412c53-5dd4-4a64-9245-303a0d78510b-000e68a5,05412c53-5dd4-4a64-9245-303a0d78510b-000e6b54,15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ed300,15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ed671,15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ed748,15e4b5d2-7816-4822-9a6f-582621dd7f1f-000edab7,15e4b5d2-7816-4822-9a6f-582621dd7f1f-000edb68,15e4b5d2-7816-4822-9a6f-582621dd7f1f-000edd53,15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ede5a,15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ede97,15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ee206,15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ee2e5,0b674385-02ea-47c1-b47a-9161015b8a2c-0010e1b5,0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb43,0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb46,0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb47,0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb48,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110747,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110dbf,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110dc2,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110dc3,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110e2d,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110e8b,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-001116d3,60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-0011170b,8a651193-8443-4bfc-862e-04384b8e34a2-001414e3,8a651193-8443-4bfc-862e-04384b8e34a2-001414e4,8a651193-8443-4bfc-862e-04384b8e34a2-00141503,8a651193-8443-4bfc-862e-04384b8e34a2-0014152d,5092ed09-dc12-489a-bd6c-212f30c25ae4-001532e4,1b69299f-5560-4669-9d4f-ab43143d6617-0015f379,d62e4423-ca4e-41c2-a258-d12c624dca49-001d8763,fd4a3767-1009-499e-9c73-45942eb0ff84-001fcb0a,2f63adc0-1512-4efd-a0cf-c49aaf851e9c-00202e7a",
+      "Description": "從 Revit 文件中選取多個元素。",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "6bf132297b464313aa51ddedc3e0e554",
+      "Name": "標註間距_內層 (樑與網格)",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "350",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 50.0,
+      "NumberType": "Double",
+      "Description": "產生數值",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "9e2bada3ee63468aa4612b74ec018a79",
+      "Name": " Y向-總尺寸位置 (否← / 是→)",
+      "Type": "boolean",
+      "Type2": "boolean",
+      "Value": "false",
+      "Description": "啟用在 True 與 False 之間選取",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "ca6d9e42ceff4cb3a0682bf4f19d6f29",
+      "Name": " X向-總尺寸位置 (否↓ / 是 ↑)",
+      "Type": "boolean",
+      "Type2": "boolean",
+      "Value": "false",
+      "Description": "啟用在 True 與 False 之間選取",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "c1bfc8de47274a9794f91c7d13613569",
+      "Name": "標註類型(key in)",
+      "Type": "string",
+      "Type2": "string",
+      "Value": "FT-DIM-BEAM(TXT_4.0mm)",
+      "Description": "建立一個字串。",
+      "SelectedIndex": 0
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 50.0,
+      "Id": "e532ddefb8d041aaa1da74800ba5f4c1",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b18b7a18230547f4b77f33546a995cc3",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 700.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "WatchWidth": 200.0,
+      "WatchHeight": 38.0,
+      "Id": "1f1207a82adf4e049100a59af557edbc",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "5e032ffe217549828597e033109986ca",
+          "Name": "",
+          "Description": "要顯示其輸出的節點",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8b27abe92f5741f486beacbe3ba4c6e8",
+          "Name": "",
+          "Description": "節點輸出",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "視覺化節點的輸出"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementsSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "5013e85c-1f63-4069-8884-8367e2baead3-0006f00e",
+        "5013e85c-1f63-4069-8884-8367e2baead3-0006f05b",
+        "5013e85c-1f63-4069-8884-8367e2baead3-0006f123",
+        "c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6bdd",
+        "c77765cc-21c1-4d39-ba06-cbda74d86fb9-000d6c78",
+        "05412c53-5dd4-4a64-9245-303a0d78510b-000e68a5",
+        "05412c53-5dd4-4a64-9245-303a0d78510b-000e6b54",
+        "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ed300",
+        "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ed671",
+        "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ed748",
+        "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000edab7",
+        "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000edb68",
+        "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000edd53",
+        "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ede5a",
+        "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ede97",
+        "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ee206",
+        "15e4b5d2-7816-4822-9a6f-582621dd7f1f-000ee2e5",
+        "0b674385-02ea-47c1-b47a-9161015b8a2c-0010e1b5",
+        "0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb43",
+        "0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb46",
+        "0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb47",
+        "0b674385-02ea-47c1-b47a-9161015b8a2c-0010fb48",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110747",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110dbf",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110dc2",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110dc3",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110e2d",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-00110e8b",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-001116d3",
+        "60dbfa67-06a0-4a09-aaef-13ba7a5a1d64-0011170b",
+        "8a651193-8443-4bfc-862e-04384b8e34a2-001414e3",
+        "8a651193-8443-4bfc-862e-04384b8e34a2-001414e4",
+        "8a651193-8443-4bfc-862e-04384b8e34a2-00141503",
+        "8a651193-8443-4bfc-862e-04384b8e34a2-0014152d",
+        "5092ed09-dc12-489a-bd6c-212f30c25ae4-001532e4",
+        "1b69299f-5560-4669-9d4f-ab43143d6617-0015f379",
+        "d62e4423-ca4e-41c2-a258-d12c624dca49-001d8763",
+        "fd4a3767-1009-499e-9c73-45942eb0ff84-001fcb0a",
+        "2f63adc0-1512-4efd-a0cf-c49aaf851e9c-00202e7a"
+      ],
+      "Id": "9b3a98c2baa94ebe86a4bb71f534300d",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "3f10bbac8d554b93bf5526513d2035ff",
+          "Name": "Elements",
+          "Description": "選取的元素。",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "從 Revit 文件中選取多個元素。"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 50.0,
+      "Id": "6bf132297b464313aa51ddedc3e0e554",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "367cb11c40d848bebba1ed64605c8167",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 350.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "9e2bada3ee63468aa4612b74ec018a79",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8d4b4486c2644edeb740b768f1002709",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": false
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "ca6d9e42ceff4cb3a0682bf4f19d6f29",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "1065dd7aa57c4d3ead48ed906e25a954",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "啟用在 True 與 False 之間選取",
+      "InputValue": false
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 1000.0,
+      "MinimumValue": 0.0,
+      "StepValue": 50.0,
+      "Id": "15306431630d428f998066f26a0f6d03",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "70bfc0a7488d49fbaafd154f3775719b",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "產生數值",
+      "InputValue": 0.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "c1bfc8de47274a9794f91c7d13613569",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "a577e59e739247dea42c2209369fcf38",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "建立一個字串。",
+      "InputValue": "FT-DIM-BEAM(TXT_4.0mm)"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\nclr.AddReference('RevitAPI')\r\nclr.AddReference('RevitServices')\r\nfrom Autodesk.Revit.DB import Grid as RevitGrid\r\nfrom Autodesk.Revit.DB import (\r\n    FilteredElementCollector, DimensionType, Options,\r\n    GeometryInstance, Solid, PlanarFace, Line, XYZ,\r\n    ReferenceArray, Reference, BuiltInCategory, BuiltInParameter,\r\n    UnitUtils, UnitTypeId, Level\r\n)\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\nimport unicodedata\r\n\r\ndoc  = DocumentManager.Instance.CurrentDBDocument\r\nview = doc.ActiveView\r\n\r\nraw     = IN[0] if isinstance(IN[0], list) else [IN[0]]\r\ndname   = IN[1]\r\nD_FAR   = UnitUtils.ConvertToInternalUnits(float(IN[2] or 400), UnitTypeId.Millimeters)\r\nD_NEAR  = UnitUtils.ConvertToInternalUnits(float(IN[3] or 50),  UnitTypeId.Millimeters)\r\nMIN_LEN = UnitUtils.ConvertToInternalUnits(float(IN[4] or 500), UnitTypeId.Millimeters)\r\nSU = 1.0 if IN[5] else -1.0\r\nSZ = 1.0 if IN[6] else -1.0\r\nPAD = UnitUtils.ConvertToInternalUnits(30.0, UnitTypeId.Millimeters)\r\n\r\ndef mm(v): return UnitUtils.ConvertToInternalUnits(v, UnitTypeId.Millimeters)\r\ndef uw(x): return x.InternalElement if hasattr(x, 'InternalElement') else x\r\n\r\nEXCLUDE_KW = [\r\n    unicodedata.normalize('NFC', \"\\u4e0a\\u4e0b\\u589e\\u6253\"),\r\n    unicodedata.normalize('NFC', \"\\u5074\\u589e\\u6253\"),\r\n]\r\n\r\nvright = view.RightDirection\r\nvdir   = view.ViewDirection\r\nview_d = view.Origin.X * vdir.X + view.Origin.Y * vdir.Y\r\n\r\ndef make_pt(u, z):\r\n    return XYZ(vright.X*u + vdir.X*view_d, vright.Y*u + vdir.Y*view_d, z)\r\n\r\ndef get_u(pt):\r\n    return pt.X * vright.X + pt.Y * vright.Y\r\n\r\nall_levels = list(FilteredElementCollector(doc).OfClass(Level))\r\n\r\ndef get_nearest_level_ref(z_top):\r\n    best, best_d = None, float('inf')\r\n    for lv in all_levels:\r\n        dz = lv.Elevation - z_top\r\n        if dz < -mm(10):  continue\r\n        if dz >  mm(500): continue\r\n        d = abs(dz)\r\n        if d < best_d:\r\n            best_d = d; best = (lv.Elevation, Reference(lv))\r\n    return best\r\n\r\nelev_grids = []\r\nfor g in FilteredElementCollector(doc).OfClass(RevitGrid):\r\n    try:\r\n        c  = g.Curve\r\n        p0 = c.GetEndPoint(0); p1 = c.GetEndPoint(1)\r\n        dx = p1.X - p0.X; dy = p1.Y - p0.Y\r\n        hl = (dx*dx + dy*dy) ** 0.5\r\n        if hl < 1e-9: continue\r\n        if abs(dx/hl * vdir.X + dy/hl * vdir.Y) > 0.7:\r\n            elev_grids.append(g)\r\n    except: pass\r\n\r\nerrors = []\r\nerrors.append(\"vright=(%.2f,%.2f) vdir=(%.2f,%.2f) grids=%d lvl=%d\" % (\r\n    vright.X, vright.Y, vdir.X, vdir.Y, len(elev_grids), len(all_levels)))\r\n\r\ndim_type = None\r\nfor dt in FilteredElementCollector(doc).OfClass(DimensionType).WhereElementIsElementType():\r\n    try:\r\n        if dt.Name == dname: dim_type = dt; break\r\n    except: continue\r\nif dim_type is None:\r\n    for dt in FilteredElementCollector(doc).OfClass(DimensionType).WhereElementIsElementType():\r\n        try:\r\n            p = dt.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME)\r\n            if p is not None and p.AsString() == dname: dim_type = dt; break\r\n        except: continue\r\nif dim_type is None:\r\n    avail = sorted([dt.Name for dt in\r\n                    FilteredElementCollector(doc).OfClass(DimensionType).WhereElementIsElementType()])\r\n    OUT = [[], [\"找不到: «%s»\" % dname] + avail]; raise Exception(\"DimensionType not found\")\r\n\r\nACCEPT_CATS = { int(BuiltInCategory.OST_StructuralFraming) }\r\n\r\nbeams = []\r\nfor item in raw:\r\n    e = uw(item)\r\n    if e is None: continue\r\n    cat = e.Category\r\n    if cat is None or cat.Id.IntegerValue not in ACCEPT_CATS:\r\n        errors.append(\"ID=%d skip Cat=%s\" % (e.Id.IntegerValue, cat.Name if cat else \"無\")); continue\r\n    raw_strs = []\r\n    try:\r\n        sym = e.Symbol; fn = sym.Family.Name; sn = sym.Name\r\n        if fn: raw_strs.append(fn)\r\n        if sn: raw_strs.append(sn)\r\n    except: pass\r\n    try:\r\n        en = e.Name\r\n        if en: raw_strs.append(en)\r\n    except: pass\r\n    try:\r\n        p = e.get_Parameter(BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM)\r\n        if p:\r\n            vs = p.AsValueString()\r\n            if vs: raw_strs.append(vs)\r\n    except: pass\r\n    combined_norm = unicodedata.normalize('NFC', \" \".join(raw_strs))\r\n    if any(kw in combined_norm for kw in EXCLUDE_KW):\r\n        errors.append(\"ID=%d skip EXCLUDED\" % e.Id.IntegerValue); continue\r\n    loc = e.Location\r\n    if loc is None or not hasattr(loc, 'Curve'):\r\n        errors.append(\"ID=%d skip 無曲線\" % e.Id.IntegerValue); continue\r\n    try:\r\n        ep0 = loc.Curve.GetEndPoint(0); ep1 = loc.Curve.GetEndPoint(1)\r\n        ddx = ep1.X - ep0.X; ddy = ep1.Y - ep0.Y\r\n        ddl_h = (ddx*ddx + ddy*ddy) ** 0.5\r\n        ddl   = (ddx*ddx + ddy*ddy + (ep1.Z-ep0.Z)**2) ** 0.5\r\n    except:\r\n        errors.append(\"ID=%d skip 端點錯誤\" % e.Id.IntegerValue); continue\r\n    if ddl < MIN_LEN:\r\n        errors.append(\"ID=%d skip 短\" % e.Id.IntegerValue); continue\r\n    if ddl_h < mm(50):\r\n        errors.append(\"ID=%d skip 垂直\" % e.Id.IntegerValue); continue\r\n    errors.append(\"ID=%d PASS [%s]\" % (e.Id.IntegerValue, combined_norm[:25]))\r\n    beams.append(e)\r\n\r\nerrors.append(\"=== beams=%d  grids=%d ===\" % (len(beams), len(elev_grids)))\r\n\r\ndef get_faces(beam, use_z):\r\n    opt = Options(); opt.ComputeReferences = True\r\n    opt.IncludeNonVisibleObjects = False; opt.View = view\r\n    cands = []\r\n    for g in beam.get_Geometry(opt):\r\n        solids = []\r\n        if isinstance(g, GeometryInstance):\r\n            try:\r\n                for sg in g.GetInstanceGeometry():\r\n                    if isinstance(sg, Solid) and sg.Volume > 1e-9: solids.append(sg)\r\n            except: pass\r\n        elif isinstance(g, Solid) and g.Volume > 1e-9:\r\n            solids.append(g)\r\n        for solid in solids:\r\n            for face in solid.Faces:\r\n                if not isinstance(face, PlanarFace): continue\r\n                fn = face.FaceNormal\r\n                score = abs(fn.Z) if use_z else abs(fn.X*vright.X + fn.Y*vright.Y)\r\n                if score < 0.9: continue\r\n                try:   ref = face.Reference\r\n                except: continue\r\n                if ref is None: continue\r\n                pos = face.Origin.Z if use_z else get_u(face.Origin)\r\n                cands.append((pos, ref))\r\n    if len(cands) < 2: return []\r\n    cands.sort(key=lambda x: x[0])\r\n    return [cands[0], cands[-1]]\r\n\r\ndef make_dim(refs_list, line):\r\n    if len(refs_list) < 2: return None\r\n    filtered = [refs_list[0]]\r\n    for item in refs_list[1:]:\r\n        if abs(item[0] - filtered[-1][0]) >= mm(1): filtered.append(item)\r\n    if len(filtered) < 2: return None\r\n    ra = ReferenceArray()\r\n    for _, ref in filtered: ra.Append(ref)\r\n    try:   return doc.Create.NewDimension(view, line, ra, dim_type)\r\n    except Exception as ex: return \"ERR:\" + str(ex)\r\n\r\nresults = []\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\nfor beam in beams:\r\n    c  = beam.Location.Curve\r\n    cu = (get_u(c.GetEndPoint(0)) + get_u(c.GetEndPoint(1))) / 2.0\r\n    cz = (c.GetEndPoint(0).Z   + c.GetEndPoint(1).Z)   / 2.0\r\n    zf = get_faces(beam, use_z=True)\r\n    ef = get_faces(beam, use_z=False)   # ← 移到最前，縱向也用得到\r\n\r\n    # 橫向樑面 u 範圍\r\n    if len(ef) >= 2:\r\n        u_lo = ef[0][0]; u_hi = ef[-1][0]\r\n    else:\r\n        u_lo = cu; u_hi = cu\r\n\r\n    # 樓層線（縱向用）\r\n    lv = get_nearest_level_ref(zf[-1][0]) if len(zf) >= 2 else None\r\n\r\n    # 橫向標註基準 Z（樑外側面）\r\n    if len(zf) >= 2:\r\n        z_h_base = zf[0][0] if SZ < 0 else zf[-1][0]\r\n    else:\r\n        z_h_base = cz\r\n    z_in  = z_h_base + SZ * D_NEAR\r\n    z_out = z_h_base + SZ * D_FAR\r\n\r\n    # ── ① 縱向：以樑外側面起算，保持一致間距 ──────────────────────\r\n    # SU < 0 (←) → 左側面往左  SU > 0 (→) → 右側面往右\r\n    u_line = (u_lo - D_NEAR) if SU < 0 else (u_hi + D_NEAR)\r\n\r\n    if len(zf) >= 2:\r\n        v_refs = list(zf) + ([lv] if lv else [])\r\n        v_refs.sort(key=lambda x: x[0])\r\n        ln = Line.CreateBound(make_pt(u_line, v_refs[0][0]-PAD),\r\n                              make_pt(u_line, v_refs[-1][0]+PAD))\r\n        d = make_dim(v_refs, ln)\r\n        (results if d and not isinstance(d, str) else errors).append(d)\r\n    else:\r\n        errors.append(\"Beam %d: 頂底面未找到\" % beam.Id.IntegerValue)\r\n\r\n    # ── ② 橫向 ───────────────────────────────────────────────────\r\n    if len(ef) < 2:\r\n        errors.append(\"Beam %d: 水平面未找到\" % beam.Id.IntegerValue)\r\n        continue\r\n\r\n    inner = list(ef); has_grid = False\r\n    for g in elev_grids:\r\n        try:\r\n            gc  = g.Curve\r\n            u_g = (get_u(gc.GetEndPoint(0)) + get_u(gc.GetEndPoint(1))) / 2.0\r\n            if u_lo - mm(5) <= u_g <= u_hi + mm(5):\r\n                inner.append((u_g, Reference(g))); has_grid = True\r\n        except: pass\r\n\r\n    inner.sort(key=lambda x: x[0])\r\n    inner2 = [inner[0]]\r\n    for f in inner[1:]:\r\n        if abs(f[0] - inner2[-1][0]) >= mm(1): inner2.append(f)\r\n\r\n    if has_grid and len(inner2) >= 3:\r\n        ln = Line.CreateBound(make_pt(inner2[0][0]-PAD, z_in),\r\n                              make_pt(inner2[-1][0]+PAD, z_in))\r\n        d = make_dim(inner2, ln)\r\n        (results if d and not isinstance(d, str) else errors).append(d)\r\n        outer = [inner2[0], inner2[-1]]\r\n        if abs(outer[-1][0]-outer[0][0]) > mm(1):\r\n            ln = Line.CreateBound(make_pt(outer[0][0]-PAD, z_out),\r\n                                  make_pt(outer[-1][0]+PAD, z_out))\r\n            d = make_dim(outer, ln)\r\n            (results if d and not isinstance(d, str) else errors).append(d)\r\n    else:\r\n        if abs(u_hi - u_lo) > mm(1):\r\n            ln = Line.CreateBound(make_pt(u_lo-PAD, z_in),\r\n                                  make_pt(u_hi+PAD, z_in))\r\n            d = make_dim(ef, ln)\r\n            (results if d and not isinstance(d, str) else errors).append(d)\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\nOUT = [results, errors]",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "2a6d1a5643b04f8a81cac1a956c70f3b",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "76a24f97b94a42dcb8355900292b1f1d",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bc1159a6882d41a6a99e6f9f7f965f36",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f37bb78eee0b411a9d7c5f6a3f982f72",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c8a89d6168664f2887e1afc4410bf3f0",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9d65fcfb281f4707b7d72026fe60f208",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a909d3b91c4748a8a6833ae48ade099d",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e17b02346cfc4da2a5a4117be911ebdc",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5d6acc22c8e04944807c4692e36ad947",
+          "Name": "OUT",
+          "Description": "Python 指令碼的結果",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "執行嵌入的 Python 指令碼。"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "b18b7a18230547f4b77f33546a995cc3",
+      "End": "f37bb78eee0b411a9d7c5f6a3f982f72",
+      "Id": "095b3163e1f84a7fbd3326d380d8fde9",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3f10bbac8d554b93bf5526513d2035ff",
+      "End": "76a24f97b94a42dcb8355900292b1f1d",
+      "Id": "f4705d6bdc8a4f00b64733dd5fe1a5a2",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "367cb11c40d848bebba1ed64605c8167",
+      "End": "c8a89d6168664f2887e1afc4410bf3f0",
+      "Id": "2f08292244c641ee97386a4714424615",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8d4b4486c2644edeb740b768f1002709",
+      "End": "a909d3b91c4748a8a6833ae48ade099d",
+      "Id": "53397fa9fc5244369abf60ada74e7ff7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "1065dd7aa57c4d3ead48ed906e25a954",
+      "End": "e17b02346cfc4da2a5a4117be911ebdc",
+      "Id": "1c76a83c153d437aaab1944bd6e92b74",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "70bfc0a7488d49fbaafd154f3775719b",
+      "End": "9d65fcfb281f4707b7d72026fe60f208",
+      "Id": "8e69ce1487f84177b4c3276f8908ab58",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a577e59e739247dea42c2209369fcf38",
+      "End": "bc1159a6882d41a6a99e6f9f7f965f36",
+      "Id": "264337df68b94737bf797d7f7ebc3543",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5d6acc22c8e04944807c4692e36ad947",
+      "End": "5e032ffe217549828597e033109986ca",
+      "Id": "1e572f08bb7c48a1aff5532a09489d68",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "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",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "性質",
+      "Version": "2.19",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.1",
+      "Data": {}
+    }
+  ],
+  "Author": "CHIUNG YING",
+  "Linting": {
+    "activeLinter": "無",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.19.3.6394",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "背景預覽(_B)",
+      "EyeX": -16.423776395906014,
+      "EyeY": 17.79242442889818,
+      "EyeZ": 79.38158591354572,
+      "LookX": 16.423776395906014,
+      "LookY": -17.79242442889818,
+      "LookZ": -79.38158591354572,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "e532ddefb8d041aaa1da74800ba5f4c1",
+        "Name": "標註間距_外層 (總寬)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -23.7014481529721,
+        "Y": 273.117352573699
+      },
+      {
+        "Id": "1f1207a82adf4e049100a59af557edbc",
+        "Name": "Watch",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 799.56950090553039,
+        "Y": 350.77360444320936
+      },
+      {
+        "Id": "9b3a98c2baa94ebe86a4bb71f534300d",
+        "Name": "  框選[網格]&[樑]",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 241.91556967358997,
+        "Y": -78.04205498683433
+      },
+      {
+        "Id": "6bf132297b464313aa51ddedc3e0e554",
+        "Name": "標註間距_內層 (樑與網格)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -23.7014481529721,
+        "Y": 422.117352573699
+      },
+      {
+        "Id": "9e2bada3ee63468aa4612b74ec018a79",
+        "Name": " Y向-總尺寸位置 (否← / 是→)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -24.9258995060286,
+        "Y": 716.117352573699
+      },
+      {
+        "Id": "ca6d9e42ceff4cb3a0682bf4f19d6f29",
+        "Name": " X向-總尺寸位置 (否↓ / 是 ↑)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -28.591491327537426,
+        "Y": 877.31658802619506
+      },
+      {
+        "Id": "15306431630d428f998066f26a0f6d03",
+        "Name": "最短樑長度（過濾柱邊短樑）0：不過濾",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -23.701448152972091,
+        "Y": 569.117352573699
+      },
+      {
+        "Id": "c1bfc8de47274a9794f91c7d13613569",
+        "Name": "標註類型(key in)",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -14.177914201263263,
+        "Y": 121.23196782748792
+      },
+      {
+        "Id": "2a6d1a5643b04f8a81cac1a956c70f3b",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 575.863100096502,
+        "Y": 329.867299453836
+      }
+    ],
+    "Annotations": [],
+    "X": 81.451325534481441,
+    "Y": 106.62516496736862,
+    "Zoom": 0.62714899730761253
+  }
+}
